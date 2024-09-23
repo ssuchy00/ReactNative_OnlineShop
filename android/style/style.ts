@@ -1,4 +1,4 @@
-import { ColorValue, Dimensions, StyleProp, StyleSheet } from "react-native";
+import { ColorValue, Dimensions, DimensionValue, StyleProp, StyleSheet } from "react-native";
 
 
 const screenWidth = Dimensions.get('window').width;
@@ -44,6 +44,11 @@ export const borderLeftStyle:StyleProp<any> = (width: any, color?: ColorValue) =
     }
 }
 
+export const margin = (top:DimensionValue, right:DimensionValue, bottom:DimensionValue, left:DimensionValue) => {
+    return {marginTop: top, marginRight: right, marginBottom: bottom, marginLeft: left} 
+}
+
+ 
 
 export const ButtonStyles = StyleSheet.create({
     buttonStyle: {
