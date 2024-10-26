@@ -21,7 +21,7 @@ const SearchPage = () => {
     }
 
     const closePage = () => {
-        setPosition(vh(100) - 100??0)
+        setPosition(vh(100) - 100)
         setIsOpen(false);
 
     }
@@ -47,7 +47,7 @@ const SearchPage = () => {
         <Pressable 
             onPress={()=>setIsOpen(false)}
             style={{backgroundColor: "rgba(0,0,0,0.5)", width: vw(100), height: vh(100), position: "absolute", top: 0,
-                display: (!isOpen?"none":"flex")
+                display: (!isOpen?"none":"flex"), zIndex: 999
             }}>
 
         </Pressable>
@@ -61,6 +61,7 @@ const SearchPage = () => {
 
 const style = StyleSheet.create({
     mainStyle: {
+        zIndex: 100000,
         backgroundColor: "#fff",
         borderRadius: 20,
         width: vw(100),
