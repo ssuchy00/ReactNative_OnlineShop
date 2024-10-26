@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { borderBottomStyle } from "../../android/style/style";
+import { borderBottomStyle } from "../../style/style";
 
 export interface ISideMenuElementProps {
     text: string,

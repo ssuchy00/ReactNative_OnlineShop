@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../Consts";
-import { borderStyle } from "../../android/style/style";
+import { borderStyle } from "../../style/style";
 
 interface IOptionsSwitchProps {
     text:string

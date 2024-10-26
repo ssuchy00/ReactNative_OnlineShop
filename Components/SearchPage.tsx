@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { LayoutChangeEvent, Pressable, ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
 import { vh, vw } from "./Consts";
-import { borderStyle } from "../android/style/style";
+import { borderStyle } from "../style/style";
 import SearchForm from "./SearchPage/SearchForm";
 
 const SearchPage = () => {

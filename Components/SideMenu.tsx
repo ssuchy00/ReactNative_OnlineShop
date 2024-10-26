@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Hamburger from "./Hamburger";
 import { vh, vw } from "./Consts";
-import { borderLeftStyle } from "../android/style/style";
+import { borderLeftStyle } from "../style/style";
 import SideMenuElement, { ISideMenuElementProps } from "./SideMenu/SideMenuElement";
 
 

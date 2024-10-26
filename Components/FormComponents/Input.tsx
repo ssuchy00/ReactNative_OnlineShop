@@ -1,6 +1,6 @@
 import React, { LegacyRef, MutableRefObject, ReactDOM, ReactElement, ReactNode, useEffect, useRef } from "react";
 import { NativeSyntheticEvent, Text, TextInput, TextInputChangeEventData, View } from "react-native";
-import { borderBottomStyle, borderStyle, borderTopStyle } from "../../android/style/style";
+import { borderBottomStyle, borderStyle, borderTopStyle } from "../../style/style";
 
 interface IInputProps {
     text?:string,

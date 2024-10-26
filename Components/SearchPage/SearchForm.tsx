@@ -4,7 +4,7 @@ import Input from "../FormComponents/Input";
 import OptionsSwitch, { IOptionsSwitchOption } from "../FormComponents/OptionsSwitch";
 import DropdownMenu, { IDropdownMenuOption } from "../FormComponents/DropdownMenu";
 import Button from "../FormComponents/Button";
-import { ButtonStyles } from "../../android/style/style";
+import { ButtonStyles } from "../../style/style";
 import { COLORS } from "../Consts";
 
 
