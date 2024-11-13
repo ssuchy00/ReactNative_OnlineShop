@@ -1,8 +1,14 @@
 import React from "react";
 import { IItem } from "../../Interfaces/IItem";
-import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { IHorizontalScrollListElement } from "../../Interfaces/IHorizontalScrollListElement";
 import { borderStyle } from "../../style/style";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../App";
+import { mock_items } from "../../Views/Home";
+
+type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
 export interface IHorizontalScrollList_ItemProps {
     item: IHorizontalScrollListElement,
@@ -10,8 +16,15 @@ export interface IHorizontalScrollList_ItemProps {
 }
 
 const HorizontalScrollList_Item = (props:IHorizontalScrollList_ItemProps) => {
+
+    const navigation = useNavigation<HomeScreenProp>()
+
+    const onClickHandle = () => {
+        navigation.navigate("Item", {item: mock_items[props.item.id]})
+    }
+
     return (
-        <View style={{...StyleSheet.flatten(props.style), ...style.mainStyle}}>
+        <TouchableOpacity onPress={onClickHandle} style={{...StyleSheet.flatten(props.style), ...style.mainStyle}}>
             <View style={style.topContainerStyle}>
                 {/* Box */}
                 <View style={style.boxStyle}></View>
@@ -24,7 +37,7 @@ const HorizontalScrollList_Item = (props:IHorizontalScrollList_ItemProps) => {
             <View style={style.textContainerStyle}>
                 <Text style={{...style.textStyle, ...style.nameStyle}}>{props.item.title}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -62,14 +75,16 @@ const style = StyleSheet.create({
     },
     textContainerStyle: {
         width: '90%',
+        height: 45,
         margin: '5%',
-        marginTop: 5
+        marginTop: 5,
+        overflow: "hidden"
     },
     textStyle: {
         color: "black"
     },
     nameStyle: {
-        fontSize: 27,
+        fontSize: 17,
         textAlign: 'center',
         fontWeight: 'bold'
     }, 

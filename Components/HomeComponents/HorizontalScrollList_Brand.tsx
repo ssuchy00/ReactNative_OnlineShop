@@ -63,13 +63,14 @@ const style = StyleSheet.create({
     textContainerStyle: {
         width: '90%',
         margin: '5%',
-        marginTop: 5
+        marginTop: 5,
+        height: 45
     },
     textStyle: {
         color: "black"
     },
     nameStyle: {
-        fontSize: 27,
+        fontSize: 24,
         textAlign: 'center',
         fontWeight: 'bold'
     }, 

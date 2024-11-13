@@ -63,13 +63,15 @@ const style = StyleSheet.create({
     textContainerStyle: {
         width: '90%',
         margin: '5%',
-        marginTop: 5
+        marginTop: 5,
+        overflow: "hidden",
+        height: 45
     },
     textStyle: {
         color: "black"
     },
     nameStyle: {
-        fontSize: 27,
+        fontSize: 17,
         textAlign: 'center',
         fontWeight: 'bold'
     }, 
