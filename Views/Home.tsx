@@ -31,8 +31,14 @@ export const mock_brands:Array<IBrand> = [
 const Home = () => {
 
     const fetch = async () => {
-        const res = await axios.get("http://192.168.1.8:8080/users/user/login");
-        console.log(res.data);
+        try {
+            const res = await axios.get("http://192.168.1.8:8080/users/user/login");
+            console.log(res.data);
+        } catch(e) {
+            console.log("dupa api", e);
+        }
+       
+        
     }
 
     useEffect(()=>{
