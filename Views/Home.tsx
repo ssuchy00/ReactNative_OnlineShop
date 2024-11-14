@@ -55,9 +55,9 @@ const Home = () => {
     return (
         <Core> 
             <>
-            {popularProducts && <HorizontalScrollList elements={popularProducts} type={"items"}  elementSize={150} title="POPULARNE PRODUKTY"/>}
-            {popularCategories && <HorizontalScrollList elements={popularCategories} type={"categories"} elementSize={150} title="POPULARNE CZĘŚCI"/>}
-            {popularBrands && <HorizontalScrollList elements={popularBrands} type={"brands"} elementSize={200} title="POPULARNE MARKI"/>}
+            { popularProducts   && <HorizontalScrollList elements={popularProducts} type={"items"}  elementSize={150} title="POPULARNE PRODUKTY"/>}
+            { popularCategories && <HorizontalScrollList elements={popularCategories} type={"categories"} elementSize={150} title="POPULARNE CZĘŚCI"/>}
+            { popularBrands     && <HorizontalScrollList elements={popularBrands} type={"brands"} elementSize={200} title="POPULARNE MARKI"/>}
             </>
         </Core>
     )
