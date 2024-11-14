@@ -1,7 +1,6 @@
 import React, { ReactDOM, ReactElement, ReactNode, useEffect, useState } from "react";
 import { CellRendererProps, ScrollView, StyleSheet, Text, View } from "react-native";
-import HorizontalScrollListElement from "./HorizontalScrollListElement";
-import { mock_items } from "../../Views/Home";
+import HorizontalScrollListElement from "./HorizontalScrollListElement"; 
 import { IItem } from "../../Interfaces/IItem";
 import { borderLeftStyle, margin } from "../../style/style"; 
 import HorizontalScrollList_Item from "./HorizontalScrollList_Item";

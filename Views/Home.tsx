@@ -6,21 +6,6 @@ import APIHandler from "../Functions/APIHandler";
 import { IApiResponse, IBrand, ICart, ICategory, IProduct } from "../Interfaces/IApiResponse";
 import { IBrandsFetch, ICartFetch, ICategoryFetch, IProductPopular } from "../Interfaces/IApiQuery";
 
-export const mock_items:Array<IItem> = [
-    {id: 0, description: "description 1", image:"imagesrc1", name: "Turbosprężarka ChujCiWdupe Ford Mondeo MK 4", price: 21.00, category: 2},
-    {id: 1, description: "description 2", image:"imagesrc2", name: "name 2 ", price: 22.37, category: 1},
-    {id: 2, description: "description 3 ", image:"imagesrc3", name: "name 3", price: 23.37, category: 3},
-    {id: 3, description: "description 4", image:"imagesrc4", name: "name 4", price: 24.37, category: 4},
-]
-
-export const mock_categories:Array<ICategory> = [
- 
-]
-
-export const mock_brands:Array<IBrand> = [
- 
-]
-
 const Home = () => {
 
     const [popularProducts, setPopularProducts] = useState<Array<IProduct> | null>(null)

@@ -5,8 +5,7 @@ import { IHorizontalScrollListElement } from "../../Interfaces/IHorizontalScroll
 import { borderStyle } from "../../style/style";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../App";
-import { mock_items } from "../../Views/Home";
+import { RootStackParamList } from "../../App"; 
 import { IProduct } from "../../Interfaces/IApiResponse";
 
 type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;

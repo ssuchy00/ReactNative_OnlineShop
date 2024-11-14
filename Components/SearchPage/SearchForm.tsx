@@ -26,17 +26,6 @@ const SearchForm = (props:ISearchFormParams) => {
             props.openPageFunction()
     }
 
-    const options:Array<IOptionsSwitchOption> = [
-        {key: "new", text: "Nowe"},
-        {key: "used", text: "Używane"},
-    ]
-
-    const types:Array<IDropdownMenuOption> = [
-        {key: 0, name: "Typ 1"},
-        {key: 1, name: "Typ 2"},
-        {key: 2, name: "Typ 3"},
-    ]
-
     const [originality, setOriginality] = useState<Array<IOptionsSwitchOption>>([])
     const [categories, setCategories] = useState<Array<IDropdownMenuOption>>([])
     const [brands, setBrands] = useState<Array<IDropdownMenuOption>>([])
