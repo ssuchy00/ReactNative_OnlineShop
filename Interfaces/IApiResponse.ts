@@ -1,59 +1,64 @@
-export interface Address {
+export interface IApiResponse<type> {
+    status:number,
+    data: type | null
+}
+
+export interface IAddress {
     addressId:number
     street:string
     houseNumber:string
-    flatNumber?:string
+    flatNumber:string | null
     postalCode:string
     city:string,
     userId:number
 }
 
-export interface Brand {
+export interface IBrand {
     brandId:number,
     name:string,
     logoUrl:string
 }
 
-export interface Cart {
+export interface ICart {
     cartId:number,
     userId:number,
-    cartItems:Array<CartItem>
+    cartItems:Array<ICartItem>
 }
 
-export interface CartItem {
+export interface ICartItem {
     cartItemId:number,
-    product: Product,             
+    product: IProduct,             
     quantity:number
 }
 
-export interface Category {
+export interface ICategory {
     categoryId:number,
     name:string,
     imageUrl:string
 }
 
-export interface Manufacturer {
+export interface IManufacturer {
     manufacturerId:number,
     name:string
 }
 
-export interface Order {
+export interface IOrder {
     orderId:number,
     userId:number,
     total:number,
     paymentId:string,
     createdAt:Date,
     status:string,
-    orderItems: OrderItem             
+    orderItems: IOrderItem             
 }
 
-export interface OrderItem {
+export interface IOrderItem {
     orderItemId:number,
-    product:Product                
+    product:IProduct                
     quantity:number
 }
 
-export interface Product {
+export interface IProduct {
     productId:number,
     name:string,
     price:number,
@@ -64,17 +69,17 @@ export interface Product {
     brandId:number
 }
 
-export interface User {
+export interface IUser {
     userId:number,
     email:string,
     password:string,
     firstName:string,
     lastName:string,
     phoneNumber:string,
-    role: Role
+    role: ERole
 }
 
-enum Role {
+enum ERole {
     "user",
     "admin"
 }

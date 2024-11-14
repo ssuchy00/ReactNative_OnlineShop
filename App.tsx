@@ -9,8 +9,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import Home from './Views/Home';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text } from 'react-native';
 import Item, { IItemProps } from './Views/Item';
  
 

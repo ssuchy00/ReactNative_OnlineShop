@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import { ScrollView, Text } from "react-native";
 import Core from "../Components/Core";
 import { IItem } from "../Interfaces/IItem";
 import HorizontalScrollList from "../Components/HomeComponents/HorizontalScrollList";
-import { ICategory } from "../Interfaces/ICategory";
-import HorizontalScrollList_Item from "../Components/HomeComponents/HorizontalScrollList_Item";
-import { IBrand } from "../Interfaces/IBrand";
-import axios from "axios";
+import { ICategory } from "../Interfaces/ICategory"; 
+import { IBrand } from "../Interfaces/IBrand"; 
+import APIHandler from "../Functions/APIHandler";
+import { IApiResponse, ICart } from "../Interfaces/IApiResponse";
+import { ICartFetch } from "../Interfaces/IApiQuery";
 
 export const mock_items:Array<IItem> = [
     {id: 0, description: "description 1", image:"imagesrc1", name: "Turbosprężarka ChujCiWdupe Ford Mondeo MK 4", price: 21.00, category: 2},
@@ -31,14 +31,15 @@ export const mock_brands:Array<IBrand> = [
 const Home = () => {
 
     const fetch = async () => {
-        try {
-            const res = await axios.get("http://192.168.1.8:8080/users/user/login");
-            console.log(res.data);
-        } catch(e) {
-            console.log("dupa api", e);
+        const queryData:ICartFetch = {userId:2}
+        const cart:IApiResponse<ICart> = await APIHandler.functions.cart_fetch(queryData);
+        if(cart.status!=200)
+        {
+            console.log("BŁOND!", cart.status)
+            return;
         }
-       
-        
+
+        console.log(cart.data);
     }
 
     useEffect(()=>{
