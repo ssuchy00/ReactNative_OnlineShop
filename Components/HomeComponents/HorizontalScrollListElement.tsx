@@ -1,8 +1,7 @@
 import React from "react";
 import { IItem } from "../../Interfaces/IItem";
 import { StyleProp, StyleSheet, Text, View, ViewProps, ViewStyle } from "react-native";
-import { borderBottomStyle, borderStyle, margin } from "../../style/style";
-import { mock_categories } from "../../Views/Home";
+import { borderBottomStyle, borderStyle, margin } from "../../style/style"; 
 import { COLORS } from "../Consts";
 
 export interface IHorizontalScrollListElementProps {
