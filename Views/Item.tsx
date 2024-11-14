@@ -1,12 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { IItem } from "../Interfaces/IItem";
+import { StyleSheet, Text, View } from "react-native"; 
 import Core from "../Components/Core";
 import { vw } from "../Components/Consts";
 import { margin } from "../style/style";
+import { IProduct } from "../Interfaces/IApiResponse";
 
 export interface IItemProps {
-    item:IItem,
+    item:IProduct,
 }
 
 const Item = ({route}:{route:{params:IItemProps}}) => { 
@@ -19,6 +19,9 @@ const Item = ({route}:{route:{params:IItemProps}}) => {
                 <Text style={style.titleStyle}>{route.params.item.name}</Text>
                 {/* Price */}
                 <Text style={style.priceStyle}>{route.params.item.price.toFixed(2)} PLN</Text>
+                {/* Description */}
+                <Text style={style.descriptionStyle}>{route.params.item.description}</Text>
+
             </View>
         </Core>
     )
@@ -26,7 +29,8 @@ const Item = ({route}:{route:{params:IItemProps}}) => {
 
 const style = StyleSheet.create({
     mainStyle: {
-        padding: 0
+        padding: 0,
+        marginBottom: 10
     }, 
     
     imgViewStyle: {
@@ -39,8 +43,13 @@ const style = StyleSheet.create({
 
     },
     titleStyle: {
-        fontSize: 25,
+        fontSize: 30,
         color: "black"
+    },
+    descriptionStyle: {
+        fontSize: 20,
+        color: "gray",
+        marginTop: 30
     },
     priceStyle: {
         color: "orange",

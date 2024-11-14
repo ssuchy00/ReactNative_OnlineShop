@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Core from "../Components/Core";
 import { IItem } from "../Interfaces/IItem";
-import HorizontalScrollList from "../Components/HomeComponents/HorizontalScrollList";
-import { ICategory } from "../Interfaces/ICategory"; 
-import { IBrand } from "../Interfaces/IBrand"; 
+import HorizontalScrollList from "../Components/HomeComponents/HorizontalScrollList"; 
 import APIHandler from "../Functions/APIHandler";
-import { IApiResponse, ICart } from "../Interfaces/IApiResponse";
-import { ICartFetch } from "../Interfaces/IApiQuery";
+import { IApiResponse, IBrand, ICart, ICategory, IProduct } from "../Interfaces/IApiResponse";
+import { IBrandsFetch, ICartFetch, ICategoryFetch, IProductPopular } from "../Interfaces/IApiQuery";
 
 export const mock_items:Array<IItem> = [
     {id: 0, description: "description 1", image:"imagesrc1", name: "Turbosprężarka ChujCiWdupe Ford Mondeo MK 4", price: 21.00, category: 2},
@@ -16,42 +14,50 @@ export const mock_items:Array<IItem> = [
 ]
 
 export const mock_categories:Array<ICategory> = [
-    {id: 0, name: "Nazwa 1", image: "blabla1"},
-    {id: 1, name: "Nazwa 2", image: "blabla2"},
-    {id: 2, name: "Nazwa 3", image: "blabla3"},
-    {id: 3, name: "Nazwa 4", image: "blabla4"},
+ 
 ]
 
 export const mock_brands:Array<IBrand> = [
-    {id: 0, image: "Image 1", name: "Brand 1"},
-    {id: 1, image: "Image 2", name: "Brand 2"},
-    {id: 2, image: "Image 3", name: "Brand 3"},
+ 
 ]
 
 const Home = () => {
 
-    const fetch = async () => {
-        const queryData:ICartFetch = {userId:2}
-        const cart:IApiResponse<ICart> = await APIHandler.functions.cart_fetch(queryData);
-        if(cart.status!=200)
-        {
-            console.log("BŁOND!", cart.status)
-            return;
-        }
+    const [popularProducts, setPopularProducts] = useState<Array<IProduct> | null>(null)
+    const [popularCategories, setPopularCategories] = useState<Array<ICategory> | null>(null)
+    const [popularBrands, setPopularBrands] = useState<Array<IBrand> | null>(null)
 
-        console.log(cart.data);
+    const fetchPopular = async () => {
+        // Popular products
+        const queryData:IProductPopular = {}
+        const _popular:IApiResponse<Array<IProduct>> = await APIHandler.functions.products_popular(queryData);
+        setPopularProducts(_popular.data); 
+    }
+
+    const fetchCategories = async () => {
+        const queryData:ICategoryFetch = {}
+        const _categories:IApiResponse<Array<ICategory>> = await APIHandler.functions.categories(queryData)
+        setPopularCategories(_categories.data)
+    }
+
+    const fetchBrands = async () => {
+        const queryData:IBrandsFetch = {}
+        const _brands:IApiResponse<Array<IBrand>> = await APIHandler.functions.brands(queryData)
+        setPopularBrands(_brands.data)
     }
 
     useEffect(()=>{
-        fetch();
+        fetchPopular();
+        fetchCategories();
+        fetchBrands();
     }, [])
 
     return (
         <Core> 
             <>
-            <HorizontalScrollList elements={mock_items} type={"items"}  elementSize={150} title="POPULARNE PRODUKTY"/>
-            <HorizontalScrollList elements={mock_categories} type={"categories"} elementSize={150} title="POPULARNE CZĘŚCI"/>
-            <HorizontalScrollList elements={mock_brands} type={"brands"} elementSize={200} title="POPULARNE MARKI"/>
+            {popularProducts && <HorizontalScrollList elements={popularProducts} type={"items"}  elementSize={150} title="POPULARNE PRODUKTY"/>}
+            {popularCategories && <HorizontalScrollList elements={popularCategories} type={"categories"} elementSize={150} title="POPULARNE CZĘŚCI"/>}
+            {popularBrands && <HorizontalScrollList elements={popularBrands} type={"brands"} elementSize={200} title="POPULARNE MARKI"/>}
             </>
         </Core>
     )

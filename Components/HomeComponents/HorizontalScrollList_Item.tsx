@@ -7,11 +7,12 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import { mock_items } from "../../Views/Home";
+import { IProduct } from "../../Interfaces/IApiResponse";
 
 type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
 export interface IHorizontalScrollList_ItemProps {
-    item: IHorizontalScrollListElement,
+    item: IProduct,
     style?: StyleProp<ViewStyle>
 }
 
@@ -19,8 +20,8 @@ const HorizontalScrollList_Item = (props:IHorizontalScrollList_ItemProps) => {
 
     const navigation = useNavigation<HomeScreenProp>()
 
-    const onClickHandle = () => {
-        navigation.navigate("Item", {item: mock_items[props.item.id]})
+    const onClickHandle = () => { 
+        navigation.navigate("Item", {item: props.item})
     }
 
     return (
@@ -35,7 +36,7 @@ const HorizontalScrollList_Item = (props:IHorizontalScrollList_ItemProps) => {
 
             {/* Title */}
             <View style={style.textContainerStyle}>
-                <Text style={{...style.textStyle, ...style.nameStyle}}>{props.item.title}</Text>
+                <Text style={{...style.textStyle, ...style.nameStyle}}>{props.item.name}</Text>
             </View>
         </TouchableOpacity>
     )

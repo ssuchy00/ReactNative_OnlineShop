@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios"
-import { IAddress, IApiResponse } from "../Interfaces/IApiResponse"
-import { ICartFetch } from "../Interfaces/IApiQuery";
+import { IAddress, IApiResponse, IBrand } from "../Interfaces/IApiResponse"
+import { IBrandsFetch, ICartFetch, ICategoryFetch, IProductPopular } from "../Interfaces/IApiQuery";
 
 const APIHandler = {
     basic_url: "http://192.168.1.8:8080",
@@ -66,15 +66,44 @@ const APIHandler = {
                 return returnError(err);
             }
         },
+        products_popular: async(data: IProductPopular) => {
+            const url = APIHandler.getUrl(APIHandler.suburls.product.popular)
+            try {
+                const res = await axios.get(url);
+                return returnSuccess(res.data);
+            }catch(e:unknown) {
+                console.log(url);
+                const err = e as AxiosError
+                return returnError(err);
+            }
+        },
+        categories: async(data: ICategoryFetch) => {
+            const url = APIHandler.getUrl(APIHandler.suburls.category.fetch)
+            try {
+                const res = await axios.get(url);
+                return returnSuccess(res.data);
+            }catch(e:unknown) {
+                console.log(url);
+                const err = e as AxiosError
+                return returnError(err);
+            }
+        },
+        brands: async(data: IBrandsFetch) => {
+            const url = APIHandler.getUrl(APIHandler.suburls.brand.fetch)
+            try {
+                const res = await axios.get(url);
+                return returnSuccess(res.data);
+            }catch(e:unknown) {
+                console.log(url);
+                const err = e as AxiosError
+                return returnError(err);
+            }
+        }
     },
 
     getUrl: (_url:string) => {
         return APIHandler.basic_url + _url
     },
-
-  
-
-    
 }
 
 const returnSuccess = <T>(data:T):IApiResponse<T> => {

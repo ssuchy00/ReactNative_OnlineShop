@@ -3,17 +3,16 @@ import { CellRendererProps, ScrollView, StyleSheet, Text, View } from "react-nat
 import HorizontalScrollListElement from "./HorizontalScrollListElement";
 import { mock_items } from "../../Views/Home";
 import { IItem } from "../../Interfaces/IItem";
-import { borderLeftStyle, margin } from "../../style/style";
-import { ICategory } from "../../Interfaces/ICategory";
+import { borderLeftStyle, margin } from "../../style/style"; 
 import HorizontalScrollList_Item from "./HorizontalScrollList_Item";
 import { IHorizontalScrollListElement } from "../../Interfaces/IHorizontalScrollListElement";
-import HorizontalScrollList_Category from "./HorizontalScrollList_Category";
-import { IBrand } from "../../Interfaces/IBrand";
+import HorizontalScrollList_Category from "./HorizontalScrollList_Category"; 
 import HorizontalScrollList_Brand from "./HorizontalScrollList_Brand";
+import { IBrand, ICategory, IProduct } from "../../Interfaces/IApiResponse";
 
 
 export interface IHorizontalScrollListProps {
-    elements: Array<IItem | ICategory | IBrand>
+    elements: Array<IProduct | ICategory | IBrand>
     elementSize: number
     title: string,
     type: "categories" | "items" | "brands"
@@ -28,17 +27,20 @@ const HorizontalScrollList = (props:IHorizontalScrollListProps) => {
             <ScrollView horizontal>
                 {
                     props.type=="items" && props.elements.map((e,k)=>{ 
-                        return <HorizontalScrollList_Item style={{...style.elementStyle, width: props.elementSize}}  key={k} item={{id:e.id, title:e.name,img:e.image}}/>
+                        const e_t = e as IProduct
+                        return <HorizontalScrollList_Item style={{...style.elementStyle, width: props.elementSize}}  key={k} item={e_t}/>
                     })
                 }
                 {
                     props.type=="categories" && props.elements.map((e,k)=>{ 
-                        return <HorizontalScrollList_Category style={{...style.elementStyle, width: props.elementSize}}  key={k} item={{id:e.id, title:e.name,img:e.image}}/>
+                        const e_t = e as ICategory
+                        return <HorizontalScrollList_Category style={{...style.elementStyle, width: props.elementSize}}  key={k} item={{id:e_t.categoryId, title:e_t.name,img:e_t.imageUrl}}/>
                     })
                 }
                 {
                     props.type=="brands" && props.elements.map((e,k)=>{ 
-                        return <HorizontalScrollList_Brand style={{...style.elementStyle, width: props.elementSize}}  key={k} item={{id:e.id, title:e.name,img:e.image}}/>
+                        const e_t = e as IBrand
+                        return <HorizontalScrollList_Brand style={{...style.elementStyle, width: props.elementSize}}  key={k} item={{id:e_t.brandId, title:e_t.name,img:e_t.logoUrl}}/>
                     })
                 }
             </ScrollView>
