@@ -21,7 +21,11 @@ export interface IOrderFetch {
 }
 
 export interface IPaymentProcess {
-
+    total:number,
+    currency:string,
+    paymentId:string,
+    userId:number,
+    items:Array<ICartItem>
 }
 
 export interface ICartFetch {
@@ -48,11 +52,7 @@ export interface ICategoryFetch {
 }
 
 export interface IManufacturerFetch {
-    total:number,
-    currency:string,
-    paymentId:string,
-    userId:number,
-    items:Array<ICartItem>
+
 }
 
 export interface IProductByBrand {

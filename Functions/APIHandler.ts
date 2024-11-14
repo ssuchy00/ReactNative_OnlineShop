@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios"
 import { IAddress, IApiResponse, IBrand } from "../Interfaces/IApiResponse"
-import { IBrandsFetch, ICartFetch, ICategoryFetch, IProductPopular } from "../Interfaces/IApiQuery";
+import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular } from "../Interfaces/IApiQuery";
 
 const APIHandler = {
     basic_url: "http://192.168.1.8:8080",
@@ -90,6 +90,17 @@ const APIHandler = {
         },
         brands: async(data: IBrandsFetch) => {
             const url = APIHandler.getUrl(APIHandler.suburls.brand.fetch)
+            try {
+                const res = await axios.get(url);
+                return returnSuccess(res.data);
+            }catch(e:unknown) {
+                console.log(url);
+                const err = e as AxiosError
+                return returnError(err);
+            }
+        },
+        manufacturers: async(data: IManufacturerFetch) => {
+            const url = APIHandler.getUrl(APIHandler.suburls.manufacturer.fetch)
             try {
                 const res = await axios.get(url);
                 return returnSuccess(res.data);

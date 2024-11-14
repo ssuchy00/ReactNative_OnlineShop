@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
@@ -14,8 +14,15 @@ export interface IDropdownMenuOption {
 }
 
 
-
 const DropdownMenu = (props:IDropdownMenuProps) => {
+
+    const [placeholder, setPlaceholder] = useState<string>("Select item")
+
+    useEffect(()=>{
+        props.options.unshift({key:0,name:"Select item"});
+        setPlaceholder(props.options[0].name)
+    }, [])
+
     return (
         <View style={style.mainStyle}>
             <Text style={style.headerStyle}>{props.title}</Text>
@@ -25,6 +32,8 @@ const DropdownMenu = (props:IDropdownMenuProps) => {
                 onChange={props.onChange}
                 valueField="key"
                 style={style.dropdownStyle}
+                dropdownPosition="top"
+                placeholder={placeholder}
             />
         </View>
     )
