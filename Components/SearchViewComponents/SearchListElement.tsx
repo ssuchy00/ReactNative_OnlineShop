@@ -1,21 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { IBrand, ICategory, IManufacturer, IProduct } from "../../Interfaces/IApiResponse";
 import { margin } from "../../style/style";
 import { COLORS, vw } from "../Consts";
 import APIHandler from "../../Functions/APIHandler";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../App";
+import { useNavigation } from "@react-navigation/native"; 
+import Overflow from "./Overflow";
 
 export interface ISearchListElementProps {
     product: IProduct
 }
  
+type SearchScreenProp = NativeStackNavigationProp<RootStackParamList, 'Search'>;
+
 
 const SearchListElement = (props:ISearchListElementProps) => {
+
+    const navigation = useNavigation<SearchScreenProp>();
 
     const [categories, setCategories] = useState<Array<ICategory>>([])
     const [brands, setBrands] = useState<Array<IBrand>>([])
     const [manufacturer, setManufacturer] = useState<Array<IManufacturer>>([])
     const [serverError, setServerError] = useState<string | null>(null);
+
+    const onPressHandle = () => {
+        navigation.navigate("Item", {item:props.product})
+    }
 
     const GetCategories = async () => {
         const res = await APIHandler.functions.categories([]);
@@ -46,7 +58,7 @@ const SearchListElement = (props:ISearchListElementProps) => {
 
     return (
         serverError!=null ? <Text>{serverError}</Text> :
-        <View style={style.mainStyle}>
+        <TouchableOpacity style={style.mainStyle} onPress={onPressHandle}>
             
             {/* Image view */}
             <View style={style.imageViewStyle}></View>
@@ -63,10 +75,12 @@ const SearchListElement = (props:ISearchListElementProps) => {
                 {/* Price View */}
                 <View>
                     <Text style={style.priceStyle}>{props.product.price.toFixed(2)} PLN</Text>
-                   
                 </View>
             </View> 
-        </View>
+            
+            {/* overflow */} 
+            <Overflow style={style.overflowStyle}/>
+        </TouchableOpacity>
     )
 }
 
@@ -78,6 +92,7 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: "#fff",
         overflow: "hidden",
+        position: "relative"
     },
     imageViewStyle: {
         width: vw(26),
@@ -111,6 +126,12 @@ const style = StyleSheet.create({
         fontWeight: "bold", 
         flex: 1
     },
+    overflowStyle: {
+        position: "absolute",
+        top: 0,
+        right: 0, 
+        height: '100%' 
+    }
    
 })
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native"; 
 import Core from "../Components/Core";
-import { vw } from "../Components/Consts";
+import { COLORS, vw } from "../Components/Consts";
 import { margin } from "../style/style";
 import { IProduct } from "../Interfaces/IApiResponse";
 
@@ -37,7 +37,7 @@ const style = StyleSheet.create({
         ...margin(-10, 0, 10, -10),
         width: vw(100),
         aspectRatio: 1,
-        backgroundColor: "red"
+        backgroundColor: "lightgray"
     },
     imgStyle: {
 
@@ -52,7 +52,7 @@ const style = StyleSheet.create({
         marginTop: 30
     },
     priceStyle: {
-        color: "orange",
+        color: COLORS.mainColor,
         fontSize: 35,
         fontWeight: "bold"
     }
