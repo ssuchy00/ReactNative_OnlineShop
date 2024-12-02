@@ -8,17 +8,25 @@ import { ButtonStyles } from "../../style/style";
 import { COLORS } from "../Consts";
 import APIHandler from "../../Functions/APIHandler";
 import { IApiResponse, IBrand, ICategory, IManufacturer } from "../../Interfaces/IApiResponse";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../App";
+import { useNavigation } from "@react-navigation/native";
 
 
 interface ISearchFormParams {
     openPageFunction?: ()=>void,
+    closePageFunction?: ()=>void,
     isOpen?: boolean
 }
 
+type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+
 const SearchForm = (props:ISearchFormParams) => {
 
+    const navigation = useNavigation<HomeScreenProp>()
+
     const onSearchPhraseChange = (text:string) => {
-        console.log(text)
+        setSearchPhrase(text)
     }
 
     const onFocusHandle = () => {
@@ -31,6 +39,7 @@ const SearchForm = (props:ISearchFormParams) => {
     const [brands, setBrands] = useState<Array<IDropdownMenuOption>>([])
     const [manufacturers, setManufacturers] = useState<Array<IDropdownMenuOption>>([])
 
+    const [searchPhrase, setSearchPhrase] = useState<string>()
     const [choosenOriginality, setChoosenOriginality] = useState<string>()
     const [choosenCategory, setChoosenCategory] = useState<number>(0)
     const [choosenBrand, setChoosenBrand] = useState<number>(0)
@@ -76,8 +85,19 @@ const SearchForm = (props:ISearchFormParams) => {
         setManufacturers(keys);
     }
     
-    const searchPress = () => {
-        console.log(choosenOriginality, choosenCategory, choosenBrand, choosenManufacturer)
+    const searchPress = async () => {
+        console.log(searchPhrase, choosenOriginality, choosenCategory, choosenBrand, choosenManufacturer)
+        const res = await APIHandler.functions.searchProducts({
+            brandId: choosenBrand, 
+            categoryId: choosenCategory, 
+            manufacturerId: choosenManufacturer,
+            originality: choosenOriginality??"",
+            searchText: searchPhrase??""
+        })
+        props.closePageFunction && props.closePageFunction();
+        navigation.navigate("Search", {products: res.data})
+        
+        // console.log(res)
     }
 
     useEffect(()=>{

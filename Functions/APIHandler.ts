@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios"
 import { IAddress, IApiResponse, IBrand } from "../Interfaces/IApiResponse"
-import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular } from "../Interfaces/IApiQuery";
+import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular, IProductSearch } from "../Interfaces/IApiQuery";
 
 const APIHandler = {
     basic_url: "http://192.168.1.15:8080",
@@ -103,6 +103,27 @@ const APIHandler = {
             const url = APIHandler.getUrl(APIHandler.suburls.manufacturer.fetch)
             try {
                 const res = await axios.get(url);
+                return returnSuccess(res.data);
+            }catch(e:unknown) {
+                console.log(url);
+                const err = e as AxiosError
+                return returnError(err);
+            }
+        },
+        searchProducts: async(data:IProductSearch)=>{
+            data.brandId = data.brandId==0?null:data.brandId;
+            data.categoryId = data.categoryId==0?null:data.categoryId;
+            data.manufacturerId = data.manufacturerId==0?null:data.manufacturerId; 
+
+            const url = APIHandler.getUrl(APIHandler.suburls.product.search) 
+            const formData = new FormData();
+            Object.entries(data).map((e)=>{
+                formData.append(e[0], e[1])
+            })
+            console.log(data)
+            try {
+                const res = await axios.post(url, data);
+                console.log("RES",res.data)
                 return returnSuccess(res.data);
             }catch(e:unknown) {
                 console.log(url);

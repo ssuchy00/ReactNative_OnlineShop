@@ -52,7 +52,7 @@ const SearchPage = () => {
 
         </Pressable>
         <ScrollView onLayout={getElSize} ref={elRef} style={{...style.mainStyle, top: position}}>
-            <SearchForm isOpen={isOpen} openPageFunction={()=>setIsOpen(true)} />
+            <SearchForm isOpen={isOpen} openPageFunction={()=>setIsOpen(true)} closePageFunction={()=>{setIsOpen(false)}}/>
             <TouchableOpacity onPress={switchOpen} style={style.topBarStyle}></TouchableOpacity>
         </ScrollView>
         </>
