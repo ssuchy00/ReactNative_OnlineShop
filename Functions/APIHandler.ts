@@ -3,7 +3,7 @@ import { IAddress, IApiResponse, IBrand } from "../Interfaces/IApiResponse"
 import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular } from "../Interfaces/IApiQuery";
 
 const APIHandler = {
-    basic_url: "http://192.168.1.8:8080",
+    basic_url: "http://192.168.1.15:8080",
     suburls: {
         address: {
             add: "/addresses/address/add",
