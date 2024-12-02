@@ -6,7 +6,7 @@ import { borderStyle } from "../../style/style";
 interface IOptionsSwitchProps {
     text:string
     options:Array<IOptionsSwitchOption>
-    onSwitch: ()=>void,
+    onSwitch: (option:string)=>void,
     
 }
 
@@ -19,9 +19,11 @@ const OptionsSwitch = (props:IOptionsSwitchProps) =>{
 
     const [currentOption, setCurrentOption] = useState<number>(0);
 
-    const switchOption = () => {
+    const switchOption = async () => {
         const maxOption = props.options.length - 1;
-        setCurrentOption(currentOption+1<=maxOption?currentOption+1:0)
+        const _curr = currentOption+1<=maxOption?currentOption+1:0
+        await setCurrentOption(_curr)
+        props.onSwitch(props.options[_curr].key);
     }
     
 

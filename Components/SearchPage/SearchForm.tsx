@@ -27,25 +27,33 @@ const SearchForm = (props:ISearchFormParams) => {
     }
 
     const [originality, setOriginality] = useState<Array<IOptionsSwitchOption>>([])
-    const [categories, setCategories] = useState<Array<IDropdownMenuOption>>([])
+    const [categories, setCategories] = useState<Array<IDropdownMenuOption>>([]) 
     const [brands, setBrands] = useState<Array<IDropdownMenuOption>>([])
     const [manufacturers, setManufacturers] = useState<Array<IDropdownMenuOption>>([])
 
+    const [choosenOriginality, setChoosenOriginality] = useState<string>()
+    const [choosenCategory, setChoosenCategory] = useState<number>(0)
+    const [choosenBrand, setChoosenBrand] = useState<number>(0)
+    const [choosenManufacturer, setChoosenManufacturer] = useState<number>(0)
+
     const fetchOriginality = async () => {
-        setOriginality([
+        const _originality = [
             {key: "oryginal", text: "Oryginał"},
             {key: "zamiennik", text: "Zamiennik"}
-        ])
+        ]
+        setOriginality(_originality)
+
+        setChoosenOriginality(_originality[0].key)
     }
 
     const fetchCategories = async () => {
         const _categories:IApiResponse<Array<ICategory>> = await APIHandler.functions.categories({});
         if(_categories.status!=200 || _categories.data==null)return;
 
-        let keys:Array<IDropdownMenuOption> = _categories.data.map((e)=>{
+        let keys:Array<IDropdownMenuOption> = await _categories.data.map((e)=>{
             return {key: e.categoryId, name: e.name}
         })
-        setCategories(keys);
+        setCategories(keys);  
     }
 
     const fetchBrands = async () => {
@@ -68,6 +76,10 @@ const SearchForm = (props:ISearchFormParams) => {
         setManufacturers(keys);
     }
     
+    const searchPress = () => {
+        console.log(choosenOriginality, choosenCategory, choosenBrand, choosenManufacturer)
+    }
+
     useEffect(()=>{
         fetchOriginality();
         fetchCategories();
@@ -75,28 +87,29 @@ const SearchForm = (props:ISearchFormParams) => {
         fetchManufacturers();
     }, [])
 
+    
     return (
         <View>
             <Input text={"Wyszukaj"} onChange={onSearchPhraseChange} onFocus={onFocusHandle} isFormOpen={props.isOpen}/>
             <OptionsSwitch 
                 text="Rodzaj"
-                onSwitch={()=>{}}
+                onSwitch={(e)=>{setChoosenOriginality(e)}}
                 options={originality}
-            />
+            />  
             <DropdownMenu 
-                onChange={()=>{}}
+                onChange={(e)=>{setChoosenCategory(e)}}
                 options={categories}
                 title="Rodzaj części"
             />
 
             <DropdownMenu 
-                onChange={()=>{}}
+                onChange={(e)=>{setChoosenBrand(e)}}
                 options={brands}
                 title="Marka samochodu"
             />
 
             <DropdownMenu 
-                onChange={()=>{}}
+                onChange={(e)=>{setChoosenManufacturer(e)}}
                 options={manufacturers}
                 title="Producent części"
             />
@@ -105,6 +118,7 @@ const SearchForm = (props:ISearchFormParams) => {
                 text="Szukaj"
                 style={{...ButtonStyles.buttonStyle, backgroundColor: COLORS.mainColor, marginTop: 20}}
                 textStyle={{...ButtonStyles.textStyle, color: "#fff"}}
+                onPress={searchPress}
             />
         </View>
     )

@@ -4,32 +4,43 @@ import { Dropdown } from "react-native-element-dropdown";
 
 interface IDropdownMenuProps {
     options: Array<IDropdownMenuOption>,
-    onChange: ()=>void,
+    onChange: (option:number)=>void,
     title?:string
 }
 
 export interface IDropdownMenuOption {
     name: string,
-    key: string|number
+    key: number
 }
 
 
 const DropdownMenu = (props:IDropdownMenuProps) => {
 
     const [placeholder, setPlaceholder] = useState<string>("Select item")
+    const [options, setOptions] = useState<Array<IDropdownMenuOption>>([]);
+
+    const addPlaceholder = () => {
+        const _options = props.options;
+        _options.unshift({key:0,name:"Wybierz"});
+        setOptions(_options);
+        setPlaceholder(_options[0].name) 
+    }
 
     useEffect(()=>{
-        props.options.unshift({key:0,name:"Select item"});
-        setPlaceholder(props.options[0].name)
-    }, [])
+        addPlaceholder()
+    },[props.options])
+
+    useEffect(()=>{
+        console.log("USEEFFECT",options)
+    }, [options]) 
 
     return (
         <View style={style.mainStyle}>
             <Text style={style.headerStyle}>{props.title}</Text>
             <Dropdown 
-                data={props.options}
+                data={options}
                 labelField={"name"}
-                onChange={props.onChange}
+                onChange={(e)=>props.onChange(e.key)}
                 valueField="key"
                 style={style.dropdownStyle}
                 dropdownPosition="top"
