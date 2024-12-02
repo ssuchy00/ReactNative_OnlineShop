@@ -9,7 +9,7 @@ export interface ISearchListProps {
 
 const SearchList = (props:ISearchListProps) => {
     return (
-        <View>{props.products ? props.products.map((e,k)=>{
+        <View style={{marginBottom: 30}}>{props.products ? props.products.map((e,k)=>{
             return <SearchListElement product={e} key={k}/> 
         }) : <Text>Nie znaleziono produktów</Text>}</View>
     )

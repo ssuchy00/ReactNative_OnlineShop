@@ -45,7 +45,7 @@ export const borderLeftStyle:StyleProp<any> = (width: any, color?: ColorValue) =
 }
 
 export const margin = (top:DimensionValue, right:DimensionValue, bottom:DimensionValue, left:DimensionValue) => {
-    return {marginTop: top, marginRight: right, marginBottom: bottom, marginLeft: left} 
+    return {marginTop: top??0, marginRight: right??0, marginBottom: bottom??0, marginLeft: left??0} 
 }
 
  
