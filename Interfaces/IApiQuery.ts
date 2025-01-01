@@ -52,7 +52,7 @@ export interface ICategoryFetch {
 }
 
 export interface IManufacturerFetch {
-
+    
 }
 
 export interface IProductByBrand {

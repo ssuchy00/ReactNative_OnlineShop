@@ -19,6 +19,12 @@ interface ISearchFormParams {
     isOpen?: boolean
 }
 
+export const _originality = [
+    {key: "all", text: "Wszystkie"},
+    {key: "oryginal", text: "Oryginał"},
+    {key: "zamiennik", text: "Zamiennik"}
+]
+
 type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
 const SearchForm = (props:ISearchFormParams) => {
@@ -44,12 +50,11 @@ const SearchForm = (props:ISearchFormParams) => {
     const [choosenCategory, setChoosenCategory] = useState<number>(0)
     const [choosenBrand, setChoosenBrand] = useState<number>(0)
     const [choosenManufacturer, setChoosenManufacturer] = useState<number>(0)
+    
+   
 
     const fetchOriginality = async () => {
-        const _originality = [
-            {key: "oryginal", text: "Oryginał"},
-            {key: "zamiennik", text: "Zamiennik"}
-        ]
+        
         setOriginality(_originality)
 
         setChoosenOriginality(_originality[0].key)

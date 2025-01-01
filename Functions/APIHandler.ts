@@ -1,9 +1,9 @@
 import axios, { AxiosError } from "axios"
-import { IAddress, IApiResponse, IBrand } from "../Interfaces/IApiResponse"
+import { IAddress, IApiResponse, IBrand, IProduct } from "../Interfaces/IApiResponse"
 import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular, IProductSearch } from "../Interfaces/IApiQuery";
 
 const APIHandler = {
-    basic_url: "http://192.168.1.15:8080",
+    basic_url: "http://192.168.1.7:8080",
     suburls: {
         address: {
             add: "/addresses/address/add",
@@ -123,8 +123,17 @@ const APIHandler = {
             console.log(data)
             try {
                 const res = await axios.post(url, data);
-                console.log("RES",res.data)
-                return returnSuccess(res.data);
+                console.log("RES",data)
+                let resdata = res.data;
+                resdata = resdata.filter((f:IProduct)=>
+                    f.description.toLowerCase().includes(data.searchText?.toLowerCase()??"") &&
+                    (f.manufacturerId == data.manufacturerId || data.manufacturerId==null) &&
+                    (f.brandId == data.brandId || data.brandId==null) &&
+                    f.name.toLowerCase().includes(data.searchText?.toLowerCase()??"") &&
+                    (f.originality==data.originality || data.originality=="all") &&
+                    (f.categoryId==data.categoryId || data.categoryId==null)
+                )
+                return returnSuccess(resdata);
             }catch(e:unknown) {
                 console.log(url);
                 const err = e as AxiosError
