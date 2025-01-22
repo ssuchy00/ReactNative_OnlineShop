@@ -6,18 +6,20 @@ export interface ICart {
 }
 
 export const CartFunctions = {
-    AddToCart: (product: IProduct) : number =>{
-        const itemsInCart:ICart | null = CartFunctions.GetCart();
+    AddToCart: async (product: IProduct) : Promise<number> =>{
+        const itemsInCart:ICart | null = await CartFunctions.GetCart();
         const newItems = itemsInCart==null ? [product] : [...itemsInCart.products, product];
         SessionHandler.storeData("cart", JSON.stringify(newItems));
-        return 0;
+        return newItems.filter(f=>f.productId==product.productId).length;
     },
-    RemoveFromCart: (product: IProduct)=>{
-        const itemsInCart:ICart | null = CartFunctions.GetCart();
+    RemoveFromCart: async (product: IProduct)=>{
+        const itemsInCart:ICart | null = await CartFunctions.GetCart();
         const newItems = itemsInCart?.products.filter(f=>f.productId!=product.productId);
         SessionHandler.storeData("cart", JSON.stringify(newItems));
     },
-    GetCart: () : ICart | null =>{
-        const itemsInCart:string = SessionHandler.getData("cart");
+    GetCart: async () : Promise<ICart | null> =>{
+        const itemsInCartStr:string = await SessionHandler.getData("cart")??"[]";
+        const itemsInCart:Array<IProduct> = JSON.parse(itemsInCartStr);
+        return {products: itemsInCart}
     }
 }
