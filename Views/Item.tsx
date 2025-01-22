@@ -7,6 +7,9 @@ import { IApiResponse, ICategory, IManufacturer, IProduct } from "../Interfaces/
 import { _originality } from "../Components/SearchPage/SearchForm";
 import APIHandler from "../Functions/APIHandler";
 import Button from "../Components/FormComponents/Button";
+import { SessionHandler } from "../Functions/SessionHandler";
+import { UserFunction } from "../Functions/UserFunctions";
+import { CartFunctions } from "../Functions/CartFunctions";
 
 export interface IItemProps {
     item:IProduct,
@@ -26,9 +29,22 @@ const Item = ({route}:{route:{params:IItemProps}}) => {
         setCategory(resCategory.data?.filter(f=>f.categoryId==route.params.item.categoryId)[0])
     }
 
+    const [countInCart, setCountInCart] = useState<number>(0)
+
+
     useEffect(()=>{
         fetchData();
     }, [])
+
+    const addToCartHandle =async () => {
+        const user = await UserFunction.getUser()
+        if(user==null)
+        {
+            const count:number = await CartFunctions.AddToCart(route.params.item);
+            setCountInCart(count);
+        }else {
+        }
+    }
 
     return (
         <Core>
@@ -48,11 +64,14 @@ const Item = ({route}:{route:{params:IItemProps}}) => {
                 <Text style={style.specificationStyle}>Kategoria: {category?.name??"-"}</Text>
 
                 {/* Add to cart */}
+                {countInCart > 0 && <Text>W koszyku: {countInCart}</Text>}
                 <Button 
                     text="Dodaj do koszyka"                    
                     style={{...ButtonStyles.buttonStyle, backgroundColor: COLORS.mainColor, marginTop: 30, marginBottom: 20}}
                     textStyle={{...ButtonStyles.textStyle, color: "#fff"}}
+                    onPress={addToCartHandle}
                 />
+                
             </View>
         </Core>
     )
