@@ -44,11 +44,6 @@ const Cart = ({route}:{route:{params:ICartProps}}) => {
             <View>
                 <Text>koszyk</Text>
                 {
-                    // cartProducts && cartProducts.map((e,k)=>{
-                    //     return <CartItem product={e} key={k}/>
-                    // })
-
-
                     groupedProducts && Array.from(groupedProducts.entries()).map((e,k)=>{
                         return <CartItem product={cartProducts?.filter(f=>f.productId==e[0])[0]??null} key={k} count={groupedProducts.get(e[0])??4}/>
                     })
