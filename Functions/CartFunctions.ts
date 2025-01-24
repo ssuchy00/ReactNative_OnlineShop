@@ -13,8 +13,16 @@ export const CartFunctions = {
         return newItems.filter(f=>f.productId==product.productId).length;
     },
     RemoveFromCart: async (product: IProduct)=>{
+        const itemsInCart:ICart | null = await CartFunctions.GetCart(); 
+        const newItems = itemsInCart?.products.filter(f=>f.productId!==product.productId);
+        console.log(newItems);
+        SessionHandler.storeData("cart", JSON.stringify(newItems));
+    },
+    SubtractFromCart: async (product: IProduct)=>{
         const itemsInCart:ICart | null = await CartFunctions.GetCart();
-        const newItems = itemsInCart?.products.filter(f=>f.productId!=product.productId);
+        const index = itemsInCart?.products.findIndex(i=>i.productId==product.productId)
+        if(((index??-1)<0) || index==undefined)return;
+        const newItems = itemsInCart?.products.filter((f,k)=>k!=index)
         SessionHandler.storeData("cart", JSON.stringify(newItems));
     },
     GetCart: async () : Promise<ICart | null> =>{

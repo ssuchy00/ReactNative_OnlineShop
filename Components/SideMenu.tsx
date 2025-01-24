@@ -33,7 +33,7 @@ const SideMenu = (props:IMenuProps) => {
 
     const notloggedLinks:Array<ISideMenuElementProps> = [
         {text: "Zaloguj się", onPress: ()=>{}},
-        {text: "Koszyk", onPress: ()=>{navigation.navigate("Cart", {})}},
+        {text: "Koszyk", onPress: ()=>{hamburgerClickHandle();navigation.navigate("Cart", {})}},
         {text: "Skontaktuj się", onPress: ()=>{}, last: true},
     ]
 

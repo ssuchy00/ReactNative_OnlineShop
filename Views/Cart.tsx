@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Core from "../Components/Core";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Text } from "react-native";
 import { ICart, IProduct } from "../Interfaces/IApiResponse";
 import { UserFunction } from "../Functions/UserFunctions";
@@ -42,10 +42,12 @@ const Cart = ({route}:{route:{params:ICartProps}}) => {
     return (
         <Core>
             <View>
-                <Text>koszyk</Text>
+                <Text style={style.headerStyle}>koszyk</Text>
                 {
                     groupedProducts && Array.from(groupedProducts.entries()).map((e,k)=>{
-                        return <CartItem product={cartProducts?.filter(f=>f.productId==e[0])[0]??null} key={k} count={groupedProducts.get(e[0])??4}/>
+                        return cartProducts?.filter(f=>f.productId==e[0])!=undefined ?
+                            <CartItem product={ cartProducts?.filter(f=>f.productId==e[0])[0]} key={k} count={groupedProducts.get(e[0])??4}/> 
+                            : null
                     })
                 } 
                 {
@@ -55,5 +57,15 @@ const Cart = ({route}:{route:{params:ICartProps}}) => {
         </Core>
     )
 }
+
+const style = StyleSheet.create({
+    headerStyle: {
+        fontSize: 30,
+        color: "#252525",
+        textTransform: "uppercase",
+        fontWeight: "bold",
+        marginLeft: 8
+    }
+})
 
 export default Cart;

@@ -13,6 +13,7 @@ import Item, { IItemProps } from './Views/Item';
 import Search, { ISearchProps } from './Views/Search';
 import Cart, { ICartProps } from './Views/Cart';
 import { IMenuProps } from './Components/SideMenu';
+import { ICartItemProps } from './Components/CartComponents/CartItem';
  
 
 export type RootStackParamList = {
@@ -20,7 +21,8 @@ export type RootStackParamList = {
   Item: IItemProps
   Search:ISearchProps
   Cart: ICartProps
-  Menu: IMenuProps
+  Menu: IMenuProps,
+  CartItem: ICartItemProps
 }
  
 function App(): React.JSX.Element {
