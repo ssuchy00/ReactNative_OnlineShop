@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 export interface ICartItemProps {
     product: IProduct
     count: number
+    callback: ()=>void
 }
 
 type CartItemScreenProp = NativeStackNavigationProp<RootStackParamList, 'CartItem'>;
@@ -26,24 +27,25 @@ const CartItem = (item:ICartItemProps) =>{
     const addToCart = async () => {
         if(item==null || item.product==null)return;
         await CartFunctions.AddToCart(item.product);
-        countElements();
+        countElements(); 
     }
 
     const subtractFromCart = async () => {
         if(item==null || item.product==null)return;
         await CartFunctions.SubtractFromCart(item.product);
-        countElements();
+        countElements(); 
     }
 
     const deleteFromCart = async () => {
         if(item==null || item.product==null)return;
         await CartFunctions.RemoveFromCart(item.product);
-        countElements();
+        countElements(); 
     }
 
     const countElements = async () => {
         const elements = (await CartFunctions.GetCart())?.products.filter(f=>f.productId==item.product?.productId)
         setCount(elements?.length??0);
+        item.callback();
     }
 
     const onPressHandle = () => {
@@ -65,7 +67,7 @@ const CartItem = (item:ICartItemProps) =>{
                 {/* Price container */}
                 <View style={style.priceContainerStyle}>
                     {/* Price */}
-                    <Text style={{...style.priceContainerTextStyle, ...style.priceStyle}}>{item.product?.price} PLN </Text> 
+                    <Text style={{...style.priceContainerTextStyle, ...style.priceStyle}}>{item.product?.price.toFixed(2)} PLN </Text> 
                     {/* Count */}
                     <Text style={style.priceContainerTextStyle}>x</Text>
                     <Text style={{...style.priceContainerTextStyle, ...style.countStyle}}>{count}</Text>
