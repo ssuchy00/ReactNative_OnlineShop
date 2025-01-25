@@ -76,11 +76,7 @@ export interface IUser {
     firstName:string,
     lastName:string,
     phoneNumber:string,
-    role: ERole
+    role: string
 }
 
-enum ERole {
-    "user",
-    "admin"
-}
-
+ 

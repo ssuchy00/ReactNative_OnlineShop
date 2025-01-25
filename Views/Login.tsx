@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Core from "../Components/Core";
 import { ColorValue, StyleProp, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Input from "../Components/FormComponents/Input";
@@ -26,12 +26,16 @@ const Login = () => {
 
     const loginClickHandle = async () => {
         setCallbackMessage(null);
-        const res = await UserFunction.login(emailRef.current, passwordRef.current);
+        const res = await UserFunction.login({email: emailRef.current, password: passwordRef.current});
         if(res==false)setCallbackMessage({msg: "Błąd logowania", color: "#f0211a"});
         else {
             setCallbackMessage({msg: "Pomyślnie zalogowano", color: "#093"})
         }
     }
+
+    useEffect(()=>{
+        setCallbackMessage(null)
+    }, [])
 
     return (
         <Core>

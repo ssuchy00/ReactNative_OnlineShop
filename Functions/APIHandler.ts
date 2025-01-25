@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios"
 import { IAddress, IApiResponse, IBrand, IProduct } from "../Interfaces/IApiResponse"
-import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular, IProductSearch, IUserLogin } from "../Interfaces/IApiQuery";
+import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular, IProductSearch, IUserLogin, IUserRegister } from "../Interfaces/IApiQuery";
 
 const APIHandler = {
     basic_url: "http://192.168.1.17:8080",
@@ -143,7 +143,41 @@ const APIHandler = {
         userLogin: async(data:IUserLogin) => {
             const url = APIHandler.getUrl(APIHandler.suburls.user.login)
             try {
-                const res = await axios.post(url, data)  
+                const formData = new FormData();
+                console.log(Object.entries(data).map(e=>e))
+                // Object.entries(data).map(e=>{
+                //     formData.append(e[0], e[1])
+                // })
+                formData.append("email", "aa@cc.pl");
+                formData.append("password", "12345678");
+                console.log(formData)
+                const res = await axios.post(url, formData, {
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }})  
+                return returnSuccess(res.data)
+            }catch(e:unknown)
+            {
+                console.log(returnError(e as AxiosError));
+                console.log(url)
+                return returnError(e as AxiosError)
+            }
+            
+        },
+
+        userRegister: async(data:IUserRegister) => {
+            const url = APIHandler.getUrl(APIHandler.suburls.user.register)
+            try {
+                const formData = new FormData();
+                //console.log(Object.entries(data.user).map(e=>e))
+                Object.entries(data.user).map(e=>{
+                    formData.append(e[0], e[1])
+                })
+                console.log(data.user)
+                const res = await axios.post(url, formData, {
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }})  
                 return returnSuccess(res.data)
             }catch(e:unknown)
             {
