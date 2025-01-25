@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios"
 import { IAddress, IApiResponse, IBrand, IProduct } from "../Interfaces/IApiResponse"
-import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular, IProductSearch } from "../Interfaces/IApiQuery";
+import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular, IProductSearch, IUserLogin } from "../Interfaces/IApiQuery";
 
 const APIHandler = {
     basic_url: "http://192.168.1.17:8080",
@@ -139,6 +139,17 @@ const APIHandler = {
                 const err = e as AxiosError
                 return returnError(err);
             }
+        },
+        userLogin: async(data:IUserLogin) => {
+            const url = APIHandler.getUrl(APIHandler.suburls.user.login)
+            try {
+                const res = await axios.post(url, data)
+                console.log(returnSuccess(res.data));
+            }catch(e:unknown)
+            {
+                console.log(returnError(e as AxiosError));
+            }
+            
         }
     },
 

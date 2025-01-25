@@ -1,4 +1,5 @@
 import { IUser } from "../Interfaces/IApiResponse"
+import APIHandler from "./APIHandler"
 
 export const UserFunction = {
     getUser: async ():Promise<IUser | null> => {
@@ -7,5 +8,9 @@ export const UserFunction = {
 
     setUser: (user:IUser) => {
 
+    },
+
+    login: async (email:string, password:string) => {
+        
     }
 }

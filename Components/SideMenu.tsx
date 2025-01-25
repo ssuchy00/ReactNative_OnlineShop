@@ -7,6 +7,8 @@ import SideMenuElement, { ISideMenuElementProps } from "./SideMenu/SideMenuEleme
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
 import { useNavigation } from "@react-navigation/native";
+import { ICartProps } from "../Views/Cart";
+import { ILoginProps } from "../Views/Login";
 
 
 export interface IMenuProps {
@@ -23,6 +25,14 @@ const SideMenu = (props:IMenuProps) => {
 
     const loggedUser = null;
 
+    type ViewType = "Cart" | "Login"
+    type ParamsType = ICartProps | ILoginProps
+
+    const Navigate = (view:ViewType, params:ParamsType) => {
+        hamburgerClickHandle();
+        navigation.navigate(view, params)
+    }
+
     const loggedLinks:Array<ISideMenuElementProps> = [
         {text: "Wyloguj się", onPress: ()=>{}},
         {text: "Ustawienia konta", onPress: ()=>{}, last:true},
@@ -32,8 +42,8 @@ const SideMenu = (props:IMenuProps) => {
     ]
 
     const notloggedLinks:Array<ISideMenuElementProps> = [
-        {text: "Zaloguj się", onPress: ()=>{}},
-        {text: "Koszyk", onPress: ()=>{hamburgerClickHandle();navigation.navigate("Cart", {})}},
+        {text: "Zaloguj się", onPress: ()=>{Navigate("Login",{})}},
+        {text: "Koszyk", onPress: ()=>{Navigate("Cart", {})}},
         {text: "Skontaktuj się", onPress: ()=>{}, last: true},
     ]
 
