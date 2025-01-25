@@ -143,11 +143,13 @@ const APIHandler = {
         userLogin: async(data:IUserLogin) => {
             const url = APIHandler.getUrl(APIHandler.suburls.user.login)
             try {
-                const res = await axios.post(url, data)
-                console.log(returnSuccess(res.data));
+                const res = await axios.post(url, data)  
+                return returnSuccess(res.data)
             }catch(e:unknown)
             {
                 console.log(returnError(e as AxiosError));
+                console.log(url)
+                return returnError(e as AxiosError)
             }
             
         }

@@ -1,4 +1,4 @@
-import { IUser } from "../Interfaces/IApiResponse"
+import { IApiResponse, IUser } from "../Interfaces/IApiResponse"
 import APIHandler from "./APIHandler"
 
 export const UserFunction = {
@@ -10,7 +10,8 @@ export const UserFunction = {
 
     },
 
-    login: async (email:string, password:string) => {
-        
+    login: async (email:string, password:string):Promise<boolean> => {
+        const res:IApiResponse<IUser> = await APIHandler.functions.userLogin({email,password}); 
+        return res.data?.email!=undefined
     }
 }

@@ -15,6 +15,7 @@ import Cart, { ICartProps } from './Views/Cart';
 import { IMenuProps } from './Components/SideMenu';
 import { ICartItemProps } from './Components/CartComponents/CartItem';
 import Login, { ILoginProps } from './Views/Login';
+import Register, { IRegisterProps } from './Views/Register';
  
 
 export type RootStackParamList = {
@@ -25,6 +26,7 @@ export type RootStackParamList = {
   Menu: IMenuProps,
   CartItem: ICartItemProps,
   Login: ILoginProps
+  Register: IRegisterProps
 }
  
 function App(): React.JSX.Element {
@@ -39,6 +41,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name='Search' component={Search}/>
         <Stack.Screen name='Cart' component={Cart}/>
         <Stack.Screen name='Login' component={Login}/>
+        <Stack.Screen name='Register' component={Register}/>
       </Stack.Navigator>
     </NavigationContainer> 
   )
