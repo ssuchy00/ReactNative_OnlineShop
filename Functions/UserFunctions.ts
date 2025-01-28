@@ -1,6 +1,7 @@
 import { IUserLogin, IUserRegister } from "../Interfaces/IApiQuery";
 import {IApiResponse, IUser } from "../Interfaces/IApiResponse"
 import APIHandler from "./APIHandler"
+import { SessionHandler } from "./SessionHandler";
 
 export interface IRegisterUser {
     email: string
@@ -28,12 +29,15 @@ export const REGISTER_CALLBACK_STRING = {
     checkPassword: "Hasła się różnią",
     emailFormat: "Niepoprawny format adresu e-mail",
     rulesAccepted: "Proszę zaakceptować regulamin",
-    otherProblem: "Wystąpił niezidentyfikowany problem"
+    otherProblem: "Użytkownik o podanym mailu istnieje"
 }
 
 export const UserFunction = {
     getUser: async ():Promise<IUser | null> => {
-        return null
+        const user_str = await SessionHandler.getData("user");
+        const user:IUser | null = JSON.parse(user_str??"null")
+        console.log("User_str",user_str)
+        return user;
     },
 
     setUser: (user:IUser) => {
@@ -42,8 +46,12 @@ export const UserFunction = {
 
     login: async (data:IUserLogin):Promise<boolean> => {
         const res:IApiResponse<IUser> = await APIHandler.functions.userLogin({email:data.email,password:data.password}); 
-        console.log(res)
+        SessionHandler.storeData("user", JSON.stringify(res.data??"null"))
         return res.data?.email!=undefined
+    },
+
+    logout: async () => {
+        await SessionHandler.storeData("user", "null")
     },
 
     register: async(data:IRegisterUser):Promise<number> => {

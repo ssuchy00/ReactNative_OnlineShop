@@ -9,6 +9,7 @@ import { RootStackParamList } from "../App";
 import { useNavigation } from "@react-navigation/native";
 import { ICartProps } from "../Views/Cart";
 import { ILoginProps } from "../Views/Login";
+import { UserFunction } from "../Functions/UserFunctions";
 
 
 export interface IMenuProps {
@@ -22,8 +23,7 @@ const SideMenu = (props:IMenuProps) => {
     const navigation = useNavigation<MenuScreenProp>()
 
     const [menuPos, setMenuPos]  = useState<number>(0)
-
-    const loggedUser = null;
+    const [loggedUser, setLoggedUser] = useState<string | null>(null);
 
     type ViewType = "Cart" | "Login"
     type ParamsType = ICartProps | ILoginProps
@@ -34,7 +34,7 @@ const SideMenu = (props:IMenuProps) => {
     }
 
     const loggedLinks:Array<ISideMenuElementProps> = [
-        {text: "Wyloguj się", onPress: ()=>{}},
+        {text: "Wyloguj się", onPress: ()=>{hamburgerClickHandle();UserFunction.logout()}},
         {text: "Ustawienia konta", onPress: ()=>{}, last:true},
         {text: "Twoje zamówienia", onPress: ()=>{}},
         {text: "Koszyk", onPress: ()=>{}},
@@ -50,12 +50,19 @@ const SideMenu = (props:IMenuProps) => {
     const hamburgerClickHandle = () => {
         console.log(menuPos)
         setMenuPos(menuPos==0 ? props.closePos??0 : 0)
+        getLoggedUser();
+    }
+
+    const getLoggedUser = async () =>{
+        const user = await UserFunction.getUser();
+        if(user==null)setLoggedUser(null);
+        else setLoggedUser(user?.firstName)  
     }
 
     useEffect(()=>{
-        
+        getLoggedUser();
         setMenuPos(props.closePos??0)
-    }, [])
+    }, []) 
 
     return (
         <View style={{...style.mainStyle, right: menuPos}}>

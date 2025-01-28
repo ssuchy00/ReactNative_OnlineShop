@@ -10,6 +10,7 @@ import { UserFunction } from "../Functions/UserFunctions";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
 import { useNavigation } from "@react-navigation/native";
+import { IUser } from "../Interfaces/IApiResponse";
 
 export interface ILoginProps {}
 
@@ -28,13 +29,23 @@ const Login = () => {
         setCallbackMessage(null);
         const res = await UserFunction.login({email: emailRef.current, password: passwordRef.current});
         if(res==false)setCallbackMessage({msg: "Błąd logowania", color: "#f0211a"});
-        else {
+        else { 
             setCallbackMessage({msg: "Pomyślnie zalogowano", color: "#093"})
+            setTimeout(()=>{
+                checkIfLogged();
+            }, 1000)
         }
     }
 
+    const checkIfLogged = async () =>{
+        const user = await UserFunction.getUser(); 
+        if(user!=null)navigation.navigate("Home")
+    }
+
+
     useEffect(()=>{
         setCallbackMessage(null)
+        checkIfLogged();
     }, [])
 
     return (

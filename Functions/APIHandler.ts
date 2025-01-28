@@ -145,11 +145,9 @@ const APIHandler = {
             try {
                 const formData = new FormData();
                 console.log(Object.entries(data).map(e=>e))
-                // Object.entries(data).map(e=>{
-                //     formData.append(e[0], e[1])
-                // })
-                formData.append("email", "aa@cc.pl");
-                formData.append("password", "12345678");
+                Object.entries(data).map(e=>{
+                    formData.append(e[0], e[1])
+                })
                 console.log(formData)
                 const res = await axios.post(url, formData, {
                     headers: {
