@@ -3,7 +3,7 @@ import Core from "../Components/Core";
 import { IItem } from "../Interfaces/IItem";
 import HorizontalScrollList from "../Components/HomeComponents/HorizontalScrollList"; 
 import APIHandler from "../Functions/APIHandler";
-import { IApiResponse, IBrand, ICart, ICategory, IProduct } from "../Interfaces/IApiResponse";
+import { IApiResponse, IBrand, ICartRes, ICategory, IProduct } from "../Interfaces/IApiResponse";
 import { IBrandsFetch, ICartFetch, ICategoryFetch, IProductPopular } from "../Interfaces/IApiQuery";
 
 const Home = () => {

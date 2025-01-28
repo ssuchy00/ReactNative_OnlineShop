@@ -37,7 +37,7 @@ const SideMenu = (props:IMenuProps) => {
         {text: "Wyloguj się", onPress: ()=>{hamburgerClickHandle();UserFunction.logout()}},
         {text: "Ustawienia konta", onPress: ()=>{}, last:true},
         {text: "Twoje zamówienia", onPress: ()=>{}},
-        {text: "Koszyk", onPress: ()=>{}},
+        {text: "Koszyk", onPress: ()=>{Navigate("Cart", {})}},
         {text: "Skontaktuj się", onPress: ()=>{}, last: true},
     ]
 

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import Core from "../Components/Core";
 import { COLORS, vw } from "../Components/Consts";
 import { borderBottomStyle, ButtonStyles, margin } from "../style/style";
-import { IApiResponse, ICategory, IManufacturer, IProduct } from "../Interfaces/IApiResponse";
+import { IApiResponse, ICartRes, ICategory, IManufacturer, IProduct } from "../Interfaces/IApiResponse";
 import { _originality } from "../Components/SearchPage/SearchForm";
 import APIHandler from "../Functions/APIHandler";
 import Button from "../Components/FormComponents/Button";
@@ -34,7 +34,7 @@ const Item = ({route}:{route:{params:IItemProps}}) => {
 
     useEffect(()=>{
         fetchData();
-    }, [])
+    }, []) 
 
     const addToCartHandle =async () => {
         const user = await UserFunction.getUser()
@@ -43,8 +43,13 @@ const Item = ({route}:{route:{params:IItemProps}}) => {
             const count:number = await CartFunctions.AddToCart(route.params.item);
             setCountInCart(count);
         }else {
-        }
-    }
+            await CartFunctions.AddToCartAPI(route.params.item);
+            const count_res = await CartFunctions.GetCartAPI()
+            const count = count_res?.cartItems.filter(f=>f.product.productId==route.params.item.productId)[0].quantity??0
+            console.log(count)
+            setCountInCart(count);
+        }  
+    } 
 
     return (
         <Core>

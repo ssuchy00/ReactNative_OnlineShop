@@ -19,7 +19,7 @@ export interface IBrand {
     logoUrl:string
 }
 
-export interface ICart {
+export interface ICartRes {
     cartId:number,
     userId:number,
     cartItems:Array<ICartItem>

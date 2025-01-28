@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios"
-import { IAddress, IApiResponse, IBrand, IProduct } from "../Interfaces/IApiResponse"
+import { IAddress, IApiResponse, IBrand, ICartRes, IProduct, IUser } from "../Interfaces/IApiResponse"
 import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular, IProductSearch, IUserLogin, IUserRegister } from "../Interfaces/IApiQuery";
 
 const APIHandler = {
@@ -66,6 +66,24 @@ const APIHandler = {
                 return returnError(err);
             }
         },
+
+        cart_add: async (product: IProduct, user: IUser) => {
+            const cart:IApiResponse<ICartRes> = await APIHandler.functions.cart_fetch({userId: user.userId});
+            const cart_id = cart.data?.cartId??0
+            if(cart_id==0)return returnError(null);
+
+            const props = `/${cart_id}/${product.productId}/1`;
+            const url = await APIHandler.getUrl(APIHandler.suburls.cart.item_add)+props;
+            try {
+                const res = await axios.post(url)
+                return returnSuccess(res.data)
+            }catch(e)
+            {
+                console.warn(url)
+                return returnError(e as AxiosError)
+            }  
+        },
+
         products_popular: async(data: IProductPopular) => {
             const url = APIHandler.getUrl(APIHandler.suburls.product.popular)
             try {
@@ -196,8 +214,8 @@ const returnSuccess = <T>(data:T):IApiResponse<T> => {
     return {data: data, status: 200};
 }
 
-const returnError = <T>(e:AxiosError):IApiResponse<T> => {
-    return {data: null, status: e.status??1}
+const returnError = <T>(e:AxiosError|null):IApiResponse<T> => {
+    return {data: null, status: e?.status??1}
 }
 
 
