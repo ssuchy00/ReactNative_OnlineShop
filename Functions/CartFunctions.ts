@@ -1,4 +1,5 @@
 import { IApiResponse, ICartRes, IProduct } from "../Interfaces/IApiResponse";
+import Cart from "../Views/Cart";
 import APIHandler from "./APIHandler";
 import { SessionHandler } from "./SessionHandler";
 import { UserFunction } from "./UserFunctions";
@@ -9,6 +10,7 @@ export interface ICart {
 
 export const CartFunctions = {
     AddToCart: async (product: IProduct) : Promise<number> =>{
+        const user = await UserFunction.getUser();
         const itemsInCart:ICart | null = await CartFunctions.GetCart();
         const newItems = itemsInCart==null ? [product] : [...itemsInCart.products, product];
         SessionHandler.storeData("cart", JSON.stringify(newItems));
@@ -37,7 +39,34 @@ export const CartFunctions = {
     AddToCartAPI: async (product:IProduct) : Promise<number> => {
         const user = await UserFunction.getUser()
         if(user==null)return -1;
-        const res:IApiResponse<ICartRes> = await APIHandler.functions.cart_add(product, user)
+        const res:IApiResponse<ICartRes> = await APIHandler.functions.cart_add(product, user, 1)
+        if(res.status==200)
+        {
+            console.log(res)
+            return 1
+        }else{
+            return 0 
+        }
+    },
+    SubtractFromCartAPI: async (product:IProduct) : Promise<number> => {
+        const user = await UserFunction.getUser()
+        if(user==null)return -1;
+        const res:IApiResponse<ICartRes> = await APIHandler.functions.cart_add(product, user, -1)
+        if(res.status==200)
+        {
+            console.log(res)
+            return 1
+        }else{
+            return 0 
+        }
+    },
+    RemoveFromCartAPI: async (product:IProduct) : Promise<number> => {
+        const user = await UserFunction.getUser()
+        if(user==null)return -1;
+        const items_count:number = (await CartFunctions.GetCartAPI())?.cartItems.filter(f=>f.product.productId==product.productId)[0].quantity??0
+        console.log(items_count)
+        
+        const res:IApiResponse<ICartRes> = await APIHandler.functions.cart_add(product, user, items_count*-1)
         if(res.status==200)
         {
             console.log(res)

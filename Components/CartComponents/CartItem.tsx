@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IProduct } from "../../Interfaces/IApiResponse";
+import { ICartItem, IProduct } from "../../Interfaces/IApiResponse";
 import { StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
 import { borderBottomStyle, borderStyle, ButtonStyles } from "../../style/style";
 import { COLORS } from "../Consts";
@@ -9,11 +9,15 @@ import { CartFunctions } from "../../Functions/CartFunctions";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import { useNavigation } from "@react-navigation/native";
+import Cart from "../../Views/Cart";
 
 export interface ICartItemProps {
     product: IProduct
     count: number
-    callback: ()=>void
+    callback: ()=>void,
+    loggedIn?: boolean
+    type?: "api" | "session"
+    getElements: ()=>void
 }
 
 type CartItemScreenProp = NativeStackNavigationProp<RootStackParamList, 'CartItem'>;
@@ -25,26 +29,34 @@ const CartItem = (item:ICartItemProps) =>{
 
     const [count, setCount] = useState<number>(0);
     const addToCart = async () => {
+        
+        item.getElements();
         if(item==null || item.product==null)return;
-        await CartFunctions.AddToCart(item.product);
+        if(item.type=="api")await CartFunctions.AddToCartAPI(item.product);
+        else await CartFunctions.AddToCart(item.product);
         countElements(); 
     }
 
     const subtractFromCart = async () => {
         if(item==null || item.product==null)return;
-        await CartFunctions.SubtractFromCart(item.product);
+        if(item.type=="api")await CartFunctions.SubtractFromCartAPI(item.product);
+        else await CartFunctions.SubtractFromCart(item.product);
         countElements(); 
     }
 
     const deleteFromCart = async () => {
         if(item==null || item.product==null)return;
-        await CartFunctions.RemoveFromCart(item.product);
+        if(item.type=="api") await CartFunctions.RemoveFromCartAPI(item.product);
+        else await CartFunctions.RemoveFromCart(item.product);
         countElements(); 
     }
 
     const countElements = async () => {
-        const elements = (await CartFunctions.GetCart())?.products.filter(f=>f.productId==item.product?.productId)
-        setCount(elements?.length??0);
+        let elements = 0;
+        if(item.type!="api")elements = (await CartFunctions.GetCart())?.products.filter(f=>f.productId==item.product?.productId).length??0
+        else elements = (await CartFunctions.GetCartAPI())?.cartItems.filter(f=>f.product.productId==item.product?.productId)[0].quantity??0
+        
+        setCount(elements);
         item.callback();
     }
 
@@ -53,10 +65,14 @@ const CartItem = (item:ICartItemProps) =>{
     }
 
     useEffect(()=>{
+        countElements();
+    })
+
+    useEffect(()=>{
         setCount(item.count);
     },[])
-
     return (
+        
         <TouchableOpacity onPress={onPressHandle} style={style.main}>
             {/* img */}
             <View style={style.imgStyle}></View>
@@ -80,6 +96,15 @@ const CartItem = (item:ICartItemProps) =>{
                     <Text style={{...style.priceContainerTextStyle, ...style.sumStyle}}>{(count * (item.product?.price??0)).toFixed(2)} PLN</Text>
                 </View>
                 
+                {item.loggedIn && (
+                    <Button 
+                        text="Dodaj do koszyka"
+                        style={{...ButtonStyles.buttonStyle, ...style.buttonStyle, backgroundColor: "#0c6", width: 200}}
+                        textStyle={{...ButtonStyles.textStyle, ...style.buttonTextStyle, fontSize: 20}}
+                        onPress={()=>{CartFunctions.AddToCartAPI(item.product); item.getElements()}}
+                    />
+                )}
+        
                 {/* buttons */}
                 <View style={style.buttonContainerStyle}>
                     <Button 

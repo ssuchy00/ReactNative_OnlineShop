@@ -25,16 +25,17 @@ const SideMenu = (props:IMenuProps) => {
     const [menuPos, setMenuPos]  = useState<number>(0)
     const [loggedUser, setLoggedUser] = useState<string | null>(null);
 
-    type ViewType = "Cart" | "Login"
-    type ParamsType = ICartProps | ILoginProps
+    type ViewType = "Cart" | "Login" | "Home"
+    type ParamsType = ICartProps | ILoginProps | {}
 
-    const Navigate = (view:ViewType, params:ParamsType) => {
+    const Navigate = (view:ViewType, params:ParamsType | null = null) => {
         hamburgerClickHandle();
-        navigation.navigate(view, params)
+        if(view=="Home")navigation.navigate(view);
+        else navigation.navigate(view, params??{})
     }
 
     const loggedLinks:Array<ISideMenuElementProps> = [
-        {text: "Wyloguj się", onPress: ()=>{hamburgerClickHandle();UserFunction.logout()}},
+        {text: "Wyloguj się", onPress: ()=>{Navigate("Home");hamburgerClickHandle();UserFunction.logout()}},
         {text: "Ustawienia konta", onPress: ()=>{}, last:true},
         {text: "Twoje zamówienia", onPress: ()=>{}},
         {text: "Koszyk", onPress: ()=>{Navigate("Cart", {})}},

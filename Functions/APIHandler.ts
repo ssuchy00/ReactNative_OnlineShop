@@ -67,12 +67,12 @@ const APIHandler = {
             }
         },
 
-        cart_add: async (product: IProduct, user: IUser) => {
+        cart_add: async (product: IProduct, user: IUser, count:number) => {
             const cart:IApiResponse<ICartRes> = await APIHandler.functions.cart_fetch({userId: user.userId});
             const cart_id = cart.data?.cartId??0
             if(cart_id==0)return returnError(null);
 
-            const props = `/${cart_id}/${product.productId}/1`;
+            const props = `/${cart_id}/${product.productId}/${count}`;
             const url = await APIHandler.getUrl(APIHandler.suburls.cart.item_add)+props;
             try {
                 const res = await axios.post(url)

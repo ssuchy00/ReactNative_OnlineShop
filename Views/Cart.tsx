@@ -90,7 +90,7 @@ const Cart = ({route}:{route:{params:ICartProps}}) => {
                 <Text style={style.headerStyle}>koszyk</Text>
                     {
                         cartProductsAPI && cartProductsAPI?.map((e,k)=>{
-                            return <CartItem callback={updateSum} product={e.product} count={e.quantity} key={k}/>       
+                            return <CartItem getElements={getElements} type="api" callback={updateSum} product={e.product} count={e.quantity} key={k}/>       
                         })
                                
                     } 
@@ -106,11 +106,12 @@ const Cart = ({route}:{route:{params:ICartProps}}) => {
 
                 {/* Session cart */}
                 <View>
-                    <Text style={!user ? style.headerStyle : null}>koszyk {user&&"z urządzenia"}</Text>
+                    
+                    <Text style={!user ? style.headerStyle : {...style.headerStyle, ...style.subHeaderStyle}}>koszyk {user&&"z urządzenia"}</Text>
                     {
                         groupedProductsSession && Array.from(groupedProductsSession.entries()).map((e,k)=>{
                             return cartProductsSession?.filter(f=>f.productId==e[0])!=undefined ?
-                                <CartItem callback={updateSum} product={ cartProductsSession?.filter(f=>f.productId==e[0])[0]} key={k} count={groupedProductsSession.get(e[0])??0}/> 
+                                <CartItem getElements={getElements} loggedIn={user!=null} callback={updateSum} product={ cartProductsSession?.filter(f=>f.productId==e[0])[0]} key={k} count={groupedProductsSession.get(e[0])??0}/> 
                                 : null 
                         })
                     } 
@@ -136,7 +137,10 @@ const style = StyleSheet.create({
         fontWeight: "bold",
         marginLeft: 8
     },
-
+    subHeaderStyle: {
+        fontSize: 20, 
+        color: "#555"
+    },
     sumContainerStyle: {
         display: "flex",
         flexDirection: "row"
@@ -148,7 +152,8 @@ const style = StyleSheet.create({
 
     sumStyle: {
         color: COLORS.mainColor,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        marginBottom: 30
     }
 })
 
