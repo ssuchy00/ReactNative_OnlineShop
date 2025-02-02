@@ -8,6 +8,8 @@ import { CartFunctions } from "../Functions/CartFunctions";
 import CartItem from "../Components/CartComponents/CartItem";
 import { COLORS } from "../Components/Consts";
 import APIHandler from "../Functions/APIHandler";
+import Button from "../Components/FormComponents/Button";
+import { ButtonStyles } from "../style/style";
 
 export interface ICartProps {
 
@@ -72,6 +74,12 @@ const Cart = ({route}:{route:{params:ICartProps}}) => {
         await fetchData(); 
     } 
 
+    const buyNowClickHandle = async () => {
+        if(user==null || !cartProductsAPI)return;
+        const res = await APIHandler.functions.buyNow(cartProductsAPI, user);
+        console.log(res)
+    }
+
     useEffect(()=>{
         getElements();
     }, [])
@@ -103,6 +111,16 @@ const Cart = ({route}:{route:{params:ICartProps}}) => {
                         <Text style={{...style.sumContainerTextStyle, ...style.sumStyle}}>{sumAPI.toFixed(2)} PLN</Text>
                     </View>
                 </View>}
+
+                {/* Buy now button */}
+                {user ? <Button 
+                    text="Kup teraz"
+                    style={{...ButtonStyles.buttonStyle ,backgroundColor: COLORS.mainColor, width: "100%", marginTop: -20, marginBottom: 20}} 
+                    onPress={buyNowClickHandle}
+                    textStyle={{...ButtonStyles.textStyle, color: "#fff"}}
+                    /> : 
+                    <Text style={{color: COLORS.mainColor, fontSize: 20, textAlign: "center", marginTop: 20}}>Zaloguj się aby dokonać zakupu</Text>
+                }
 
                 {/* Session cart */}
                 <View>

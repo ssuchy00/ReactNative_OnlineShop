@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios"
-import { IAddress, IApiResponse, IBrand, ICartRes, IProduct, IUser } from "../Interfaces/IApiResponse"
+import { IAddress, IApiResponse, IBrand, ICartItem, ICartRes, IProduct, IUser } from "../Interfaces/IApiResponse"
 import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular, IProductSearch, IUserLogin, IUserRegister } from "../Interfaces/IApiQuery";
+import { ICart } from "./CartFunctions";
 
 const APIHandler = {
     basic_url: "http://192.168.1.17:8080",
@@ -53,6 +54,10 @@ const APIHandler = {
                 const err = e as AxiosError
                 return returnError(err)
             }
+        },
+
+        buyNow: async(cart:Array<ICartItem>, user:IUser) => {
+            console.log(cart)
         },
     
         cart_fetch: async (data:ICartFetch) => {

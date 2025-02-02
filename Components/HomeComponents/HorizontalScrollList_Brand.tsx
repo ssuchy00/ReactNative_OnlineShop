@@ -1,17 +1,40 @@
 import React from "react";
 import { IItem } from "../../Interfaces/IItem";
-import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { IHorizontalScrollListElement } from "../../Interfaces/IHorizontalScrollListElement";
 import { borderStyle } from "../../style/style";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../App";
+import APIHandler from "../../Functions/APIHandler";
 
 export interface IHorizontalScrollList_BrandProps {
     item: IHorizontalScrollListElement,
     style?: StyleProp<ViewStyle>
 }
 
+type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+
 const HorizontalScrollList_Brand = (props:IHorizontalScrollList_BrandProps) => {
+
+    const navigation = useNavigation<HomeScreenProp>();
+
+    const itemPress = async () => {
+        const res = await APIHandler.functions.searchProducts({
+            brandId: props.item.id, 
+            categoryId: null, 
+            manufacturerId: null,
+            originality: "all",
+            searchText: ""
+        })
+       
+        navigation.navigate("Search", {products: res.data})
+        
+        // console.log(res)
+    }
+
     return (
-        <View style={{...StyleSheet.flatten(props.style), ...style.mainStyle}}>
+        <TouchableOpacity onPress={itemPress} style={{...StyleSheet.flatten(props.style), ...style.mainStyle}}>
             <View style={style.topContainerStyle}>
                 {/* Box */}
                 <View style={style.boxStyle}></View>
@@ -24,7 +47,7 @@ const HorizontalScrollList_Brand = (props:IHorizontalScrollList_BrandProps) => {
             <View style={style.textContainerStyle}>
                 <Text style={{...style.textStyle, ...style.nameStyle}}>{props.item.title}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
