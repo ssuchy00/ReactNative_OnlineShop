@@ -35,7 +35,7 @@ const Cart = ({route}:{route:{params:ICartProps}}) => {
         cartItems?.products.map(e=>{
             groupedItems.set(e.productId, (groupedItems.get(e.productId)??0) + 1); 
         })
-        console.log(groupedItems);
+        ////console.log(groupedItems);
         setGroupedProductsSession(groupedItems);
         setCartProductsSession(cartItems?.products??null)
          
@@ -43,7 +43,7 @@ const Cart = ({route}:{route:{params:ICartProps}}) => {
         {
             const cartItemsAPI = await CartFunctions.GetCartAPI();
             if(cartItemsAPI==null)return;
-            console.log(cartItemsAPI)
+            ////console.log(cartItemsAPI)
             setCartProductsAPI(cartItemsAPI.cartItems??null)
 
         }

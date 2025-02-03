@@ -35,7 +35,7 @@ const SearchPage = () => {
     }, [])
 
     useEffect(()=>{
-        console.log(elSize?.height, vh(100), position, isOpen)
+        //console.log(elSize?.height, vh(100), position, isOpen)
         if(isOpen)
             openPage();
         else 

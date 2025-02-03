@@ -57,7 +57,7 @@ const APIHandler = {
         },
 
         buyNow: async(cart:Array<ICartItem>, user:IUser) => {
-            console.log(cart)
+            
         },
     
         cart_fetch: async (data:ICartFetch) => {
@@ -95,7 +95,7 @@ const APIHandler = {
                 const res = await axios.get(url);
                 return returnSuccess(res.data);
             }catch(e:unknown) {
-                console.log(url);
+                //console.log(url);
                 const err = e as AxiosError
                 return returnError(err);
             }
@@ -106,7 +106,7 @@ const APIHandler = {
                 const res = await axios.get(url);
                 return returnSuccess(res.data);
             }catch(e:unknown) {
-                console.log(url);
+                //console.log(url);
                 const err = e as AxiosError
                 return returnError(err);
             }
@@ -117,7 +117,7 @@ const APIHandler = {
                 const res = await axios.get(url);
                 return returnSuccess(res.data);
             }catch(e:unknown) {
-                console.log(url);
+                //console.log(url);
                 const err = e as AxiosError
                 return returnError(err);
             }
@@ -128,7 +128,7 @@ const APIHandler = {
                 const res = await axios.get(url);
                 return returnSuccess(res.data);
             }catch(e:unknown) {
-                console.log(url);
+                //console.log(url);
                 const err = e as AxiosError
                 return returnError(err);
             }
@@ -143,10 +143,10 @@ const APIHandler = {
             Object.entries(data).map((e)=>{
                 formData.append(e[0], e[1])
             })
-            console.log(data)
+            //console.log(data)
             try {
                 const res = await axios.post(url, data);
-                console.log("RES",data)
+                //console.log("RES",data)
                 let resdata = res.data;
                 resdata = resdata.filter((f:IProduct)=>
                     f.description.toLowerCase().includes(data.searchText?.toLowerCase()??"") &&
@@ -158,7 +158,7 @@ const APIHandler = {
                 )
                 return returnSuccess(resdata);
             }catch(e:unknown) {
-                console.log(url);
+                //console.log(url);
                 const err = e as AxiosError
                 return returnError(err);
             }
@@ -167,11 +167,11 @@ const APIHandler = {
             const url = APIHandler.getUrl(APIHandler.suburls.user.login)
             try {
                 const formData = new FormData();
-                console.log(Object.entries(data).map(e=>e))
+                //console.log(Object.entries(data).map(e=>e))
                 Object.entries(data).map(e=>{
                     formData.append(e[0], e[1])
                 })
-                console.log(formData)
+                //console.log(formData)
                 const res = await axios.post(url, formData, {
                     headers: {
                       'Content-Type': 'multipart/form-data'
@@ -179,8 +179,8 @@ const APIHandler = {
                 return returnSuccess(res.data)
             }catch(e:unknown)
             {
-                console.log(returnError(e as AxiosError));
-                console.log(url)
+                //console.log(returnError(e as AxiosError));
+                //console.log(url)
                 return returnError(e as AxiosError)
             }
             
@@ -190,11 +190,11 @@ const APIHandler = {
             const url = APIHandler.getUrl(APIHandler.suburls.user.register)
             try {
                 const formData = new FormData();
-                //console.log(Object.entries(data.user).map(e=>e))
+                ////console.log(Object.entries(data.user).map(e=>e))
                 Object.entries(data.user).map(e=>{
                     formData.append(e[0], e[1])
                 })
-                console.log(data.user)
+                //console.log(data.user)
                 const res = await axios.post(url, formData, {
                     headers: {
                       'Content-Type': 'multipart/form-data'
@@ -202,8 +202,8 @@ const APIHandler = {
                 return returnSuccess(res.data)
             }catch(e:unknown)
             {
-                console.log(returnError(e as AxiosError));
-                console.log(url)
+                //console.log(returnError(e as AxiosError));
+                //console.log(url)
                 return returnError(e as AxiosError)
             }
             

@@ -31,7 +31,7 @@ const HorizontalScrollList_Category = (props:IHorizontalScrollList_CategoryProps
        
         navigation.navigate("Search", {products: res.data})
         
-        // console.log(res)
+        // //console.log(res)
     }
 
     return (

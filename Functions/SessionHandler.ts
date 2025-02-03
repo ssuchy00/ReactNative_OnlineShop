@@ -6,7 +6,7 @@ export const SessionHandler = {
         try {
             await AsyncStorage.setItem(key, value);
         } catch(error) {
-            console.log("ERROR STORING SESSION: ", error);
+            //console.log("ERROR STORING SESSION: ", error);
         }
     },
 
@@ -23,7 +23,7 @@ export const SessionHandler = {
     deleteData: async (key: string) => {
         try {
             await AsyncStorage.removeItem(key);
-            console.log('Session data removed successfully');
+            //console.log('Session data removed successfully');
         } catch (error) {
             console.error('Error removing session data: ', error);
         }

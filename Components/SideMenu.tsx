@@ -49,7 +49,7 @@ const SideMenu = (props:IMenuProps) => {
     ]
 
     const hamburgerClickHandle = () => {
-        console.log(menuPos)
+        //console.log(menuPos)
         setMenuPos(menuPos==0 ? props.closePos??0 : 0)
         getLoggedUser();
     }

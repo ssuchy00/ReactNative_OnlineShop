@@ -31,7 +31,7 @@ const DropdownMenu = (props:IDropdownMenuProps) => {
     },[props.options])
 
     useEffect(()=>{
-        console.log("USEEFFECT",options)
+        //console.log("USEEFFECT",options)
     }, [options]) 
 
     return (

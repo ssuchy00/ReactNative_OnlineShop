@@ -30,7 +30,7 @@ const HorizontalScrollList_Brand = (props:IHorizontalScrollList_BrandProps) => {
        
         navigation.navigate("Search", {products: res.data})
         
-        // console.log(res)
+        // //console.log(res)
     }
 
     return (

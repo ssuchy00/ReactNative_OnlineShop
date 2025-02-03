@@ -36,7 +36,7 @@ export const UserFunction = {
     getUser: async ():Promise<IUser | null> => {
         const user_str = await SessionHandler.getData("user");
         const user:IUser | null = JSON.parse(user_str??"null")
-        console.log("User_str",user_str)
+        //console.log("User_str",user_str)
         return user;
     },
 
@@ -63,7 +63,7 @@ export const UserFunction = {
         if(data.password!=data.password2)ret|=(1<<REGISTER_CALLBACK.checkPassword);
         //if(data.rules==false)ret|=(1<<REGISTER_CALLBACK.rulesAccepted);
         
-        //console.log(ret.toString(2), data.rules)
+        ////console.log(ret.toString(2), data.rules)
         if(ret!=0)return ret;
         const dataToSend = {user: {
             email: data.email,

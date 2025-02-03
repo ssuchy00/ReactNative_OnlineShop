@@ -19,7 +19,7 @@ export const CartFunctions = {
     RemoveFromCart: async (product: IProduct)=>{
         const itemsInCart:ICart | null = await CartFunctions.GetCart(); 
         const newItems = itemsInCart?.products.filter(f=>f.productId!==product.productId);
-        console.log(newItems);
+        //console.log(newItems);
         SessionHandler.storeData("cart", JSON.stringify(newItems));
     },
     SubtractFromCart: async (product: IProduct)=>{
@@ -42,7 +42,7 @@ export const CartFunctions = {
         const res:IApiResponse<ICartRes> = await APIHandler.functions.cart_add(product, user, 1)
         if(res.status==200)
         {
-            console.log(res)
+            //console.log(res)
             return 1
         }else{
             return 0 
@@ -54,7 +54,7 @@ export const CartFunctions = {
         const res:IApiResponse<ICartRes> = await APIHandler.functions.cart_add(product, user, -1)
         if(res.status==200)
         {
-            console.log(res)
+            //console.log(res)
             return 1
         }else{
             return 0 
@@ -64,12 +64,12 @@ export const CartFunctions = {
         const user = await UserFunction.getUser()
         if(user==null)return -1;
         const items_count:number = (await CartFunctions.GetCartAPI())?.cartItems.filter(f=>f.product.productId==product.productId)[0].quantity??0
-        console.log(items_count)
+        //console.log(items_count)
         
         const res:IApiResponse<ICartRes> = await APIHandler.functions.cart_add(product, user, items_count*-1)
         if(res.status==200)
         {
-            console.log(res)
+            //console.log(res)
             return 1
         }else{
             return 0 

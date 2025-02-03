@@ -46,7 +46,7 @@ const Item = ({route}:{route:{params:IItemProps}}) => {
             await CartFunctions.AddToCartAPI(route.params.item);
             const count_res = await CartFunctions.GetCartAPI()
             const count = count_res?.cartItems.filter(f=>f.product.productId==route.params.item.productId)[0].quantity??0
-            console.log(count)
+            //console.log(count)
             setCountInCart(count);
         }  
     } 

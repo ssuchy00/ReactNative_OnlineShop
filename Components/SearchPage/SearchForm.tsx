@@ -91,7 +91,7 @@ const SearchForm = (props:ISearchFormParams) => {
     }
     
     const searchPress = async () => {
-        console.log(searchPhrase, choosenOriginality, choosenCategory, choosenBrand, choosenManufacturer)
+        //console.log(searchPhrase, choosenOriginality, choosenCategory, choosenBrand, choosenManufacturer)
         const res = await APIHandler.functions.searchProducts({
             brandId: choosenBrand, 
             categoryId: choosenCategory, 
@@ -102,7 +102,7 @@ const SearchForm = (props:ISearchFormParams) => {
         props.closePageFunction && props.closePageFunction();
         navigation.navigate("Search", {products: res.data})
         
-        // console.log(res)
+        // //console.log(res)
     }
 
     useEffect(()=>{

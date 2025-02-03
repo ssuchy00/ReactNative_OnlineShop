@@ -44,7 +44,7 @@ const Register = () => {
         const res = await UserFunction.register(data);
         
         if(res!=0) {
-            console.log(res.toString(2), (res>>REGISTER_CALLBACK.lastnameLength)&1)
+            //console.log(res.toString(2), (res>>REGISTER_CALLBACK.lastnameLength)&1)
 
             if(((res>>REGISTER_CALLBACK.nameLength)&1)==1)
                 setCallbackMessages(prev=>[...prev??[], {msg: REGISTER_CALLBACK_STRING.nameLength, color: "red"}])

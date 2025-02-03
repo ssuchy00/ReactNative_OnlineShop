@@ -24,7 +24,7 @@ const Input = (props:IInputProps) => {
     }
 
     useEffect(()=>{
-        console.log("INPUT",props.isFormOpen)
+        //console.log("INPUT",props.isFormOpen)
         if(!props.isFormOpen)
             inputRef.current?.blur();
     }, [props.isFormOpen])
