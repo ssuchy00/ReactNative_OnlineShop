@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { ICartProps } from "../Views/Cart";
 import { ILoginProps } from "../Views/Login";
 import { UserFunction } from "../Functions/UserFunctions";
+import { IAccountSettings } from "../Views/AccountSettings";
 
 
 export interface IMenuProps {
@@ -25,8 +26,8 @@ const SideMenu = (props:IMenuProps) => {
     const [menuPos, setMenuPos]  = useState<number>(0)
     const [loggedUser, setLoggedUser] = useState<string | null>(null);
 
-    type ViewType = "Cart" | "Login" | "Home"
-    type ParamsType = ICartProps | ILoginProps | {}
+    type ViewType = "Cart" | "Login" | "Home" | "AccountSettings"
+    type ParamsType = ICartProps | ILoginProps | IAccountSettings
 
     const Navigate = (view:ViewType, params:ParamsType | null = null) => {
         hamburgerClickHandle();
@@ -36,7 +37,7 @@ const SideMenu = (props:IMenuProps) => {
 
     const loggedLinks:Array<ISideMenuElementProps> = [
         {text: "Wyloguj się", onPress: ()=>{Navigate("Home");hamburgerClickHandle();UserFunction.logout()}},
-        {text: "Ustawienia konta", onPress: ()=>{}, last:true},
+        {text: "Ustawienia konta", onPress: ()=>{Navigate("AccountSettings"), {}}, last:true},
         {text: "Twoje zamówienia", onPress: ()=>{}},
         {text: "Koszyk", onPress: ()=>{Navigate("Cart", {})}},
         {text: "Skontaktuj się", onPress: ()=>{}, last: true},
