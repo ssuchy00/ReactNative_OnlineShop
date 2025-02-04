@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios"
 import { IAddress, IApiResponse, IBrand, ICartItem, ICartRes, IProduct, IUser } from "../Interfaces/IApiResponse"
 import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular, IProductSearch, IUserLogin, IUserRegister } from "../Interfaces/IApiQuery";
 import { ICart } from "./CartFunctions";
+import { UserFunction } from "./UserFunctions";
 
 const APIHandler = {
     basic_url: "http://192.168.1.17:8080",
@@ -48,11 +49,26 @@ const APIHandler = {
     functions: {
         address_add: async (address:IAddress) => {
             try {
-                const res = await axios.post(APIHandler.getUrl(APIHandler.suburls.address.add), address);
+                const formData = new FormData();
+                Object.entries(address).map((e)=>{
+                    formData.append(e[0], e[1])
+                })
+                const res = await axios.post(APIHandler.getUrl(APIHandler.suburls.address.add), formData, { headers: { 'Content-Type': 'multipart/form-data' }});
                 return returnSuccess(res.data);
             }catch(e: unknown) {
                 const err = e as AxiosError
                 return returnError(err)
+            }
+        },
+        addres_fetch: async (user:IUser) => {
+            const props = `/${user.userId}`
+            const url = APIHandler.getUrl(APIHandler.suburls.address.fetch)+props
+            try {
+                const res = await axios.get(url); 
+                return returnSuccess(res.data);
+            }catch(e:unknown) {
+                const err = e as AxiosError
+                return returnError(err);
             }
         },
 
@@ -207,8 +223,44 @@ const APIHandler = {
                 return returnError(e as AxiosError)
             }
             
+        },
+
+        userUpdate: async(data:IUser) => {
+            const url = APIHandler.getUrl(APIHandler.suburls.user.data_update)+`/${data.userId}`
+            const formData = new FormData();
+            formData.append("firstName", data.firstName.toString())
+            formData.append("lastName", data.lastName.toString())
+            formData.append("phoneNumber", data.phoneNumber.toString())
+            try {
+                const res = await axios.put(url, formData, {headers: { 'Content-Type': 'multipart/form-data' }})
+                return returnSuccess(res.data)
+            }catch(e:unknown)
+            {
+                console.log((e as AxiosError).toJSON())
+                return returnError(e as AxiosError)
+            }
+        },
+
+        userPasswordChange: async(data:IUser, password:string, oldPassword: string) => {
+            if(data.password.length < 8)return returnError(null);
+            //check password
+            const pass_ok = await UserFunction.checkPassword(oldPassword)
+            if(pass_ok==false)return returnError(null)
+
+            const url = APIHandler.getUrl(APIHandler.suburls.user.password_change)+`/${data.userId}`
+            const formData = new FormData();
+            formData.append("newPassword", data.password.toString())
+            try {
+                const res = await axios.put(url, formData, {headers: { 'Content-Type': 'multipart/form-data' }})
+                return returnSuccess(res.data)
+            }catch(e:unknown)
+            {
+                console.log((e as AxiosError).toJSON())
+                return returnError(e as AxiosError)
+            }
         }
     },
+
 
     getUrl: (_url:string) => {
         return APIHandler.basic_url + _url

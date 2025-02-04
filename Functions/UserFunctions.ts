@@ -79,5 +79,9 @@ export const UserFunction = {
         if(res.data?.email==undefined)return (1<<REGISTER_CALLBACK.otherProblem)
 
         return 0
+    },
+    checkPassword: async (password:string):Promise<boolean> => {
+        const res:IApiResponse<IUser> = await APIHandler.functions.userLogin({email: (await UserFunction.getUser())?.email??"",password:password});
+        return res.data?.email!=undefined
     }
 }
