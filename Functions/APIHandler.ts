@@ -242,14 +242,14 @@ const APIHandler = {
         },
 
         userPasswordChange: async(data:IUser, password:string, oldPassword: string) => {
-            if(data.password.length < 8)return returnError(null);
+            if(password.length < 8)return returnError(null);
             //check password
             const pass_ok = await UserFunction.checkPassword(oldPassword)
             if(pass_ok==false)return returnError(null)
 
             const url = APIHandler.getUrl(APIHandler.suburls.user.password_change)+`/${data.userId}`
             const formData = new FormData();
-            formData.append("newPassword", data.password.toString())
+            formData.append("newPassword", password.toString())
             try {
                 const res = await axios.put(url, formData, {headers: { 'Content-Type': 'multipart/form-data' }})
                 return returnSuccess(res.data)

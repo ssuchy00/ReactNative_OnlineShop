@@ -39,7 +39,8 @@ const Login = () => {
 
     const checkIfLogged = async () =>{
         const user = await UserFunction.getUser(); 
-        if(user!=null)navigation.navigate("Home")
+        console.log(user)
+        if(user?.email!=null)navigation.navigate("Home")
     }
 
 
