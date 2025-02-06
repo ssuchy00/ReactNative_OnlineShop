@@ -29,6 +29,7 @@ export type RootStackParamList = {
   Login: ILoginProps
   Register: IRegisterProps
   AccountSettings: IAccountSettings
+  Buy:undefined
 }
  
 function App(): React.JSX.Element {
