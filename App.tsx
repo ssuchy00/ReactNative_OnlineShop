@@ -17,6 +17,7 @@ import { ICartItemProps } from './Components/CartComponents/CartItem';
 import Login, { ILoginProps } from './Views/Login';
 import Register, { IRegisterProps } from './Views/Register';
 import AccountSettings, { IAccountSettings } from './Views/AccountSettings';
+import Buy, { IBuyProps } from './Views/Buy';
  
 
 export type RootStackParamList = {
@@ -29,7 +30,7 @@ export type RootStackParamList = {
   Login: ILoginProps
   Register: IRegisterProps
   AccountSettings: IAccountSettings
-  Buy:undefined
+  Buy:IBuyProps
 }
  
 function App(): React.JSX.Element {
@@ -46,6 +47,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name='Login' component={Login}/>
         <Stack.Screen name='Register' component={Register}/>
         <Stack.Screen name='AccountSettings' component={AccountSettings}/>
+        <Stack.Screen name='Buy' component={Buy}/>
       </Stack.Navigator>
     </NavigationContainer> 
   )

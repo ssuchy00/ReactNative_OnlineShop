@@ -10,10 +10,15 @@ import { COLORS } from "../Components/Consts";
 import APIHandler from "../Functions/APIHandler";
 import Button from "../Components/FormComponents/Button";
 import { ButtonStyles } from "../style/style";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../App";
 
 export interface ICartProps {
 
 }
+
+type CartScreenProp = NativeStackNavigationProp<RootStackParamList, 'Cart'>;
 
 const Cart = ({route}:{route:{params:ICartProps}}) => {
 
@@ -26,7 +31,12 @@ const Cart = ({route}:{route:{params:ICartProps}}) => {
     const [groupedProductsAPI, setGroupedProductsAPI] = useState<Map<number, number>>()
     const [sumAPI, setSumAPI] = useState<number>(0)
 
+    const navigation = useNavigation<CartScreenProp>()
+
     const fetchData = async() =>{
+
+        
+
         const _user = await UserFunction.getUser()
         setUser(_user);
         
@@ -75,9 +85,8 @@ const Cart = ({route}:{route:{params:ICartProps}}) => {
     } 
 
     const buyNowClickHandle = async () => {
-        if(user==null || !cartProductsAPI)return;
-        const res = await APIHandler.functions.buyNow(cartProductsAPI, user);
-        console.log(res)
+        if(user==null || !cartProductsAPI)return; 
+        navigation.navigate('Buy', { cart: cartProductsAPI });
     }
 
     useEffect(()=>{
