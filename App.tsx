@@ -33,6 +33,9 @@ export type RootStackParamList = {
   Buy:IBuyProps
 }
  
+console.log = () => { 
+}
+
 function App(): React.JSX.Element {
 
   const Stack = createNativeStackNavigator<RootStackParamList>()
