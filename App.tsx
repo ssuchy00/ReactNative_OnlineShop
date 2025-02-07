@@ -18,6 +18,7 @@ import Login, { ILoginProps } from './Views/Login';
 import Register, { IRegisterProps } from './Views/Register';
 import AccountSettings, { IAccountSettings } from './Views/AccountSettings';
 import Buy, { IBuyProps } from './Views/Buy';
+import MyOrders, { IMyOrdersProps } from './Views/MyOrders';
  
 
 export type RootStackParamList = {
@@ -30,7 +31,8 @@ export type RootStackParamList = {
   Login: ILoginProps
   Register: IRegisterProps
   AccountSettings: IAccountSettings
-  Buy:IBuyProps
+  Buy:IBuyProps,
+  MyOrders: IMyOrdersProps
 }
  
 //  console.log = (e) => {console.info(e) }
@@ -50,6 +52,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name='Register' component={Register}/>
         <Stack.Screen name='AccountSettings' component={AccountSettings}/>
         <Stack.Screen name='Buy' component={Buy}/>
+        <Stack.Screen name='MyOrders' component={MyOrders}/>
       </Stack.Navigator>
     </NavigationContainer> 
   )

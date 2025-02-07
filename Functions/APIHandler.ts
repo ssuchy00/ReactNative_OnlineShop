@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios"
 import { IAddress, IApiResponse, IBrand, ICartItem, ICartRes, IProduct, IUser } from "../Interfaces/IApiResponse"
-import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IPaymentProcess, IProductPopular, IProductSearch, IUserLogin, IUserRegister } from "../Interfaces/IApiQuery";
+import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IOrderFetch, IPaymentProcess, IProductPopular, IProductSearch, IUserLogin, IUserRegister } from "../Interfaces/IApiQuery";
 import { ICart } from "./CartFunctions";
 import { UserFunction } from "./UserFunctions";
 
@@ -152,6 +152,17 @@ const APIHandler = {
         },
         manufacturers: async(data: IManufacturerFetch) => {
             const url = APIHandler.getUrl(APIHandler.suburls.manufacturer.fetch)
+            try {
+                const res = await axios.get(url);
+                return returnSuccess(res.data);
+            }catch(e:unknown) {
+                //console.log(url);
+                const err = e as AxiosError
+                return returnError(err);
+            }
+        },
+        getOrders: async(data: IOrderFetch) => {
+            const url = APIHandler.getUrl(APIHandler.suburls.order.fetch)+`/${data.userId}`
             try {
                 const res = await axios.get(url);
                 return returnSuccess(res.data);
