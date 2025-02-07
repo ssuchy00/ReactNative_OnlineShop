@@ -26,22 +26,8 @@ const Buy = ({route}:{route:{params:IBuyProps}}) => {
         setAddressData(response.data[0]);
     }
 
-    const fetchPaymentIntent = async () => {
-        try {
-            const response = await axios.post('https://buy.stripe.com/test_5kA6r88FUbqR7RecMM', {
-                amount: 1000, // 10.00 PLN
-                currency: 'pln',
-            });
-            return response.data;
-        } catch (error) {
-            console.error('Błąd pobierania PaymentIntent:', (error as AxiosError).toJSON());
-            Alert.alert('Błąd', 'Nie udało się pobrać PaymentIntent.');
-        }
-    };
-
     useEffect(()=>{
         fetchData()
-        //console.log(route.params.cart)
     }, [])
 
     return (
@@ -63,7 +49,7 @@ const Buy = ({route}:{route:{params:IBuyProps}}) => {
                 {/* Razem */}
                 <View style={style.sum}>
                     <Text style={style.sumElementText1}>Razem</Text> 
-                    <Text style={style.sumElementText2}>{route.params.cart.reduce((a,b)=>a+(b.product.price*b.quantity),0)} PLN</Text>
+                    <Text style={style.sumElementText2}>{route.params.cart.reduce((a,b)=>a+(b.product.price*b.quantity),0).toFixed(2)} PLN</Text>
                 </View>
 
                 {/* Form with user data and address fields to send. By default taken from api */}
@@ -81,22 +67,9 @@ const Buy = ({route}:{route:{params:IBuyProps}}) => {
                 <Button
                     style={style.buttonStyle} 
                     textStyle={style.buttonText} 
-                    // onPress={async ()=>{
-                    //     const res = await APIHandler.functions.buyNow(
-                    //         {
-                    //             total: route.params.cart.reduce((a,b)=>a+(b.product.price*b.quantity),0),
-                    //             currency: "PLN",
-                    //             paymentId: "pmc_1QpeaKBqfXIuWk6Z9Aoup8xK",
-                    //             userId: (await UserFunction.getUser())?.userId??-1,
-                    //             items: route.params.cart
-                    //         }
-                    //     )
-
-                    //     console.log(res)
-                    // }}
                     onPress={async ()=>{
-                        const paymentIntent = await fetchPaymentIntent();
-                        console.log(paymentIntent);
+                        
+                         
                     }}
                     text="Zamów"
                     />

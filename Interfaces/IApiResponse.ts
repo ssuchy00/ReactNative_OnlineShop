@@ -47,9 +47,9 @@ export interface IOrder {
     userId:number,
     total:number,
     paymentId:string,
-    createdAt:Date,
+    createdAt:string,
     status:string,
-    orderItems: IOrderItem             
+    orderItems: Array<IOrderItem>             
 }
 
 export interface IOrderItem {

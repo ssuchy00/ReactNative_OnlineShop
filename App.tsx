@@ -20,6 +20,8 @@ import AccountSettings, { IAccountSettings } from './Views/AccountSettings';
 import Buy, { IBuyProps } from './Views/Buy';
 import MyOrders, { IMyOrdersProps } from './Views/MyOrders';
 import Contact, { IContactProps } from './Views/Contact';
+import OrderDetails, { IOrderDetailsProps } from './Views/OrderDetails';
+import { IOrder } from './Interfaces/IApiResponse';
  
 
 export type RootStackParamList = {
@@ -35,6 +37,7 @@ export type RootStackParamList = {
   Buy:IBuyProps,
   MyOrders: IMyOrdersProps
   Contact: IContactProps
+  OrderDetails: IOrderDetailsProps
 }
  
 //  console.log = (e) => {console.info(e) }
@@ -56,6 +59,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name='Buy' component={Buy}/>
         <Stack.Screen name='MyOrders' component={MyOrders}/>
         <Stack.Screen name='Contact' component={Contact}/>
+        <Stack.Screen name='OrderDetails' component={OrderDetails}/>
       </Stack.Navigator>
     </NavigationContainer> 
   )
