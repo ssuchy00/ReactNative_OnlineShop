@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import Core from "../Components/Core"; 
 import { IAddress, ICartItem } from "../Interfaces/IApiResponse";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
 import { borderBottomStyle, ButtonStyles } from "../style/style";
 import { COLORS, vw } from "../Components/Consts";
 import APIHandler from "../Functions/APIHandler";
 import { UserFunction } from "../Functions/UserFunctions";
 import Button from "../Components/FormComponents/Button";
+import axios, { AxiosError } from "axios";
 
 export interface IBuyProps {
     cart: Array<ICartItem>
@@ -24,6 +25,19 @@ const Buy = ({route}:{route:{params:IBuyProps}}) => {
         console.log(response.data)
         setAddressData(response.data[0]);
     }
+
+    const fetchPaymentIntent = async () => {
+        try {
+            const response = await axios.post('https://buy.stripe.com/test_5kA6r88FUbqR7RecMM', {
+                amount: 1000, // 10.00 PLN
+                currency: 'pln',
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Błąd pobierania PaymentIntent:', (error as AxiosError).toJSON());
+            Alert.alert('Błąd', 'Nie udało się pobrać PaymentIntent.');
+        }
+    };
 
     useEffect(()=>{
         fetchData()
@@ -67,18 +81,22 @@ const Buy = ({route}:{route:{params:IBuyProps}}) => {
                 <Button
                     style={style.buttonStyle} 
                     textStyle={style.buttonText} 
-                    onPress={async ()=>{
-                        const res = await APIHandler.functions.buyNow(
-                            {
-                                total: route.params.cart.reduce((a,b)=>a+(b.product.price*b.quantity),0),
-                                currency: "PLN",
-                                paymentId: "pmc_1QpeaKBqfXIuWk6Z9Aoup8xK",
-                                userId: (await UserFunction.getUser())?.userId??-1,
-                                items: route.params.cart
-                            }
-                        )
+                    // onPress={async ()=>{
+                    //     const res = await APIHandler.functions.buyNow(
+                    //         {
+                    //             total: route.params.cart.reduce((a,b)=>a+(b.product.price*b.quantity),0),
+                    //             currency: "PLN",
+                    //             paymentId: "pmc_1QpeaKBqfXIuWk6Z9Aoup8xK",
+                    //             userId: (await UserFunction.getUser())?.userId??-1,
+                    //             items: route.params.cart
+                    //         }
+                    //     )
 
-                        console.log(res)
+                    //     console.log(res)
+                    // }}
+                    onPress={async ()=>{
+                        const paymentIntent = await fetchPaymentIntent();
+                        console.log(paymentIntent);
                     }}
                     text="Zamów"
                     />

@@ -1,17 +1,23 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, Touchable, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { COLORS } from "./Consts";
 import Hamburger from "./Hamburger";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../App";
+
+type MainScreenProp = NativeStackNavigationProp<RootStackParamList, 'Menu'>;
 
 const Header = () => {
+    const navigation = useNavigation<MainScreenProp>()
     return (
-        <View style={style.mainStyle}>
+        <Pressable style={style.mainStyle} onPress={()=>{navigation.navigate("Home")}}>
             {/* Logo */}
             <View style={style.logoStyle}>
                 <Text style={{...style.logoTextStyle, color: COLORS.mainColor}}>OTO</Text>
                 <Text style={{...style.logoTextStyle, color: "black"}}>SZROTO</Text>
             </View>
-        </View>
+        </Pressable>
     )
 }
 const style = StyleSheet.create({

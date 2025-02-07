@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IItem } from "../../Interfaces/IItem";
-import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import { ImageBackground, StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { IHorizontalScrollListElement } from "../../Interfaces/IHorizontalScrollListElement";
 import { borderStyle } from "../../style/style";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App"; 
 import { IProduct } from "../../Interfaces/IApiResponse";
+import { Image } from "react-native"; 
+import APIHandler from "../../Functions/APIHandler";
 
 type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -18,10 +20,21 @@ export interface IHorizontalScrollList_ItemProps {
 const HorizontalScrollList_Item = (props:IHorizontalScrollList_ItemProps) => {
 
     const navigation = useNavigation<HomeScreenProp>()
+    const [image, setImage] = useState<string | null>(null)
+
+    const getImage = async() => {
+        if(props.item.imageUrl.at(0)=='p')setImage("https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500");
+        else setImage(props.item.imageUrl)
+        //setImage(Buffer.from(response.data, 'binary').toString('base64'))
+    }
 
     const onClickHandle = () => { 
         navigation.navigate("Item", {item: props.item})
     }
+
+    useEffect(()=>{
+        getImage()
+    }, [])
 
     return (
         <TouchableOpacity onPress={onClickHandle} style={{...StyleSheet.flatten(props.style), ...style.mainStyle}}>
@@ -29,7 +42,9 @@ const HorizontalScrollList_Item = (props:IHorizontalScrollList_ItemProps) => {
                 {/* Box */}
                 <View style={style.boxStyle}></View>
                 {/* Image */}
-                <View style={style.imageContainerStyle}></View>
+                <View style={style.imageContainerStyle}>
+                    {image && <Image source={image?{uri: image}:require("../../src/img/1.png")} style={style.imageStyle}/>}
+                </View>
 
             </View>
 
@@ -56,9 +71,6 @@ const style = StyleSheet.create({
         position: "absolute",
         width: '100%',
         // backgroundColor: "blue",
-        
-        ...borderStyle(10, 'blue'),
-        borderRadius: 1000
     },
     imageStyle: {
         width: '100%',

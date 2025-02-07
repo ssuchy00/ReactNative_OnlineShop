@@ -184,17 +184,10 @@ const APIHandler = {
             })
             //console.log(data)
             try {
-                const res = await axios.post(url, data);
-                //console.log("RES",data)
+                data.originality = data.originality=="all"?null:data.originality;
+                const res = await axios.post(url, data, {headers: { 'Content-Type': 'multipart/form-data' }});
+                console.log("RES",data, res.data)
                 let resdata = res.data;
-                resdata = resdata.filter((f:IProduct)=>
-                    f.description.toLowerCase().includes(data.searchText?.toLowerCase()??"") &&
-                    (f.manufacturerId == data.manufacturerId || data.manufacturerId==null) &&
-                    (f.brandId == data.brandId || data.brandId==null) &&
-                    f.name.toLowerCase().includes(data.searchText?.toLowerCase()??"") &&
-                    (f.originality==data.originality || data.originality=="all") &&
-                    (f.categoryId==data.categoryId || data.categoryId==null)
-                )
                 return returnSuccess(resdata);
             }catch(e:unknown) {
                 //console.log(url);
@@ -280,6 +273,15 @@ const APIHandler = {
             {
                 console.log((e as AxiosError).toJSON())
                 return returnError(e as AxiosError)
+            }
+        },
+        getImage: async (url:string) => {
+            try {
+                const res = await axios.get(url, {responseType: 'arraybuffer'});
+                return returnSuccess(res.data)
+            }catch(e:unknown) {
+                const err = e as AxiosError
+                return returnError(err);
             }
         }
     },

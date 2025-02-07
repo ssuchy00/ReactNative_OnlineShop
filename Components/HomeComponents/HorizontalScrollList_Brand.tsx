@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IItem } from "../../Interfaces/IItem";
 import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { IHorizontalScrollListElement } from "../../Interfaces/IHorizontalScrollListElement";
@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import APIHandler from "../../Functions/APIHandler";
+import { Image } from "react-native";
 
 export interface IHorizontalScrollList_BrandProps {
     item: IHorizontalScrollListElement,
@@ -18,6 +19,16 @@ type HomeScreenProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 const HorizontalScrollList_Brand = (props:IHorizontalScrollList_BrandProps) => {
 
     const navigation = useNavigation<HomeScreenProp>();
+
+    const [image, setImage] = useState<string | null>(null)
+
+    const getImage = async() => {
+        if(props.item.img.at(0)=='p')setImage("https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500");
+        else setImage(props.item.img) 
+    }
+    useEffect(()=>{
+        getImage()
+    }, [])
 
     const itemPress = async () => {
         const res = await APIHandler.functions.searchProducts({
@@ -39,7 +50,9 @@ const HorizontalScrollList_Brand = (props:IHorizontalScrollList_BrandProps) => {
                 {/* Box */}
                 <View style={style.boxStyle}></View>
                 {/* Image */}
-                <View style={style.imageContainerStyle}></View>
+                <View style={style.imageContainerStyle}>
+                    <Image source={image?{uri: image}:require("../../src/img/1.png")} style={style.imageStyle}/>
+                </View>
 
             </View>
 
@@ -66,9 +79,6 @@ const style = StyleSheet.create({
         position: "absolute",
         width: '100%',
         // backgroundColor: "blue",
-        
-        ...borderStyle(10, 'blue'),
-        borderRadius: 1000
     },
     imageStyle: {
         width: '100%',

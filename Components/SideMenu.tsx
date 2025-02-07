@@ -12,6 +12,7 @@ import { ILoginProps } from "../Views/Login";
 import { UserFunction } from "../Functions/UserFunctions";
 import { IAccountSettings } from "../Views/AccountSettings";
 import { IMyOrdersProps } from "../Views/MyOrders";
+import { IContactProps } from "../Views/Contact";
 
 
 export interface IMenuProps {
@@ -27,8 +28,8 @@ const SideMenu = (props:IMenuProps) => {
     const [menuPos, setMenuPos]  = useState<number>(0)
     const [loggedUser, setLoggedUser] = useState<string | null>(null);
 
-    type ViewType = "Cart" | "Login" | "Home" | "AccountSettings" | "MyOrders"
-    type ParamsType = ICartProps | ILoginProps | IAccountSettings | IMyOrdersProps
+    type ViewType = "Cart" | "Login" | "Home" | "AccountSettings" | "MyOrders" | "Contact"
+    type ParamsType = ICartProps | ILoginProps | IAccountSettings | IMyOrdersProps | IContactProps
 
     const Navigate = (view:ViewType, params:ParamsType | null = null) => {
         hamburgerClickHandle();
@@ -41,7 +42,7 @@ const SideMenu = (props:IMenuProps) => {
         {text: "Ustawienia konta", onPress: ()=>{Navigate("AccountSettings"), {}}, last:true},
         {text: "Moje zamówienia", onPress: ()=>{Navigate("MyOrders", {})}},
         {text: "Koszyk", onPress: ()=>{Navigate("Cart", {})}},
-        {text: "Skontaktuj się", onPress: ()=>{}, last: true},
+        {text: "Skontaktuj się", onPress: ()=>{Navigate("Contact", {})}, last: true},
     ]
 
     const notloggedLinks:Array<ISideMenuElementProps> = [

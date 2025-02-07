@@ -67,6 +67,7 @@ export interface IProduct {
     categoryId:number,
     manufacturerId:number,
     brandId:number
+    imageUrl:string
 }
 
 export interface IUser {
