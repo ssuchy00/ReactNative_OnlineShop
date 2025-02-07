@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios"
 import { IAddress, IApiResponse, IBrand, ICartItem, ICartRes, IProduct, IUser } from "../Interfaces/IApiResponse"
-import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IProductPopular, IProductSearch, IUserLogin, IUserRegister } from "../Interfaces/IApiQuery";
+import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IPaymentProcess, IProductPopular, IProductSearch, IUserLogin, IUserRegister } from "../Interfaces/IApiQuery";
 import { ICart } from "./CartFunctions";
 import { UserFunction } from "./UserFunctions";
 
@@ -72,8 +72,20 @@ const APIHandler = {
             }
         },
 
-        buyNow: async(cart:Array<ICartItem>, user:IUser) => {
-            
+        buyNow: async(paymentRequest:IPaymentProcess) => {
+            const url = APIHandler.getUrl(APIHandler.suburls.payment.process);
+            try {
+                const formData = new FormData();
+                Object.entries(paymentRequest).map(e=>{
+                    formData.append(e[0], e[1])
+                })
+                const res = await axios.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' }})
+                return returnSuccess(res.data)
+            }catch(e:unknown)
+            {
+                console.log((e as AxiosError).toJSON())
+                return returnError(e as AxiosError)
+            }
         },
     
         cart_fetch: async (data:ICartFetch) => {

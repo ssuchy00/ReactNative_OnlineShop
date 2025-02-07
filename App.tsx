@@ -33,8 +33,7 @@ export type RootStackParamList = {
   Buy:IBuyProps
 }
  
-console.log = () => { 
-}
+//  console.log = (e) => {console.info(e) }
 
 function App(): React.JSX.Element {
 

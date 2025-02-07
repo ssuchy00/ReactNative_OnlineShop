@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import Core from "../Components/Core"; 
-import { ICartItem } from "../Interfaces/IApiResponse";
-import { StyleSheet, Text, View } from "react-native";
-import { borderBottomStyle } from "../style/style";
-import { COLORS } from "../Components/Consts";
+import { IAddress, ICartItem } from "../Interfaces/IApiResponse";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import { borderBottomStyle, ButtonStyles } from "../style/style";
+import { COLORS, vw } from "../Components/Consts";
+import APIHandler from "../Functions/APIHandler";
+import { UserFunction } from "../Functions/UserFunctions";
+import Button from "../Components/FormComponents/Button";
 
 export interface IBuyProps {
     cart: Array<ICartItem>
@@ -11,8 +14,20 @@ export interface IBuyProps {
 
 const Buy = ({route}:{route:{params:IBuyProps}}) => { 
 
+
+    const [addressData, setAddressData] = React.useState<IAddress | null>(null)
+
+    const fetchData = async() =>{
+        const user = await UserFunction.getUser();
+        if(user==null)return;
+        const response = await APIHandler.functions.addres_fetch(user);
+        console.log(response.data)
+        setAddressData(response.data[0]);
+    }
+
     useEffect(()=>{
-        console.log(route.params.cart)
+        fetchData()
+        //console.log(route.params.cart)
     }, [])
 
     return (
@@ -36,6 +51,37 @@ const Buy = ({route}:{route:{params:IBuyProps}}) => {
                     <Text style={style.sumElementText1}>Razem</Text> 
                     <Text style={style.sumElementText2}>{route.params.cart.reduce((a,b)=>a+(b.product.price*b.quantity),0)} PLN</Text>
                 </View>
+
+                {/* Form with user data and address fields to send. By default taken from api */}
+               
+                <View style={style.form}> 
+                    {/* <Text style={{...style.formLabel, ...style.input2}}>Dane adresowe</Text> */}
+                    <TextInput style={{...style.formInput, ...style.input4}} placeholder="Ulica">{addressData?.street}</TextInput>
+                    <TextInput style={{...style.formInput, ...style.input2}} placeholder="Numer domu">{addressData?.houseNumber}</TextInput>
+                    <TextInput style={{...style.formInput, ...style.input2}} placeholder="Numer mieszkania" >{addressData?.flatNumber}</TextInput>
+                    <TextInput style={{...style.formInput, ...style.input1}} placeholder="Kod pocztowy" keyboardType="numeric">{addressData?.postalCode}</TextInput>
+                    <TextInput style={{...style.formInput, ...style.input3}} placeholder="Miasto" >{addressData?.city}</TextInput>
+                </View> 
+
+                {/* Button to send order */}
+                <Button
+                    style={style.buttonStyle} 
+                    textStyle={style.buttonText} 
+                    onPress={async ()=>{
+                        const res = await APIHandler.functions.buyNow(
+                            {
+                                total: route.params.cart.reduce((a,b)=>a+(b.product.price*b.quantity),0),
+                                currency: "PLN",
+                                paymentId: "pmc_1QpeaKBqfXIuWk6Z9Aoup8xK",
+                                userId: (await UserFunction.getUser())?.userId??-1,
+                                items: route.params.cart
+                            }
+                        )
+
+                        console.log(res)
+                    }}
+                    text="Zamów"
+                    />
             </View>
         </Core>
     )
@@ -90,7 +136,49 @@ const style = StyleSheet.create({
         color: COLORS.mainColor,
         fontWeight: "bold"
     },
-    
+    form: {
+        padding: 10, 
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+    },
+    formLabel: {
+        fontSize: 20,
+        color: "black",
+        fontWeight: "bold",
+        width: vw(100),
+    },
+    formInput: {
+        borderBottomWidth: 1,
+        borderBottomColor: "gray",
+        marginBottom: 10, 
+        margin: 5
+    },
+    input1: {
+        width: vw(22) - 20
+    },
+    input2: {
+        width: vw(47) - 20
+    },
+    input3: {
+        width: vw(72) - 20
+    },
+    input4: {
+        width: vw(92) - 20
+    },
+    buttonStyle: {
+        ...ButtonStyles.buttonStyle,
+        backgroundColor: COLORS.mainColor,
+        width: "100%",
+        marginBottom: 20,
+    },
+    buttonText: {
+        ...ButtonStyles.textStyle,
+        color: "#fff",
+        lineHeight: 30,
+    }
+
 })
 
 export default Buy
