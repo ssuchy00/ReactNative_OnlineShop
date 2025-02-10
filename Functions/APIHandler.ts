@@ -172,6 +172,18 @@ const APIHandler = {
                 return returnError(err);
             }
         },
+        getUsersOrder: async(data: {}) => {
+            const url = APIHandler.getUrl(APIHandler.suburls.order.fetch)
+            try {
+                const res = await axios.get(url);
+                console.log("Users Order",res)
+                return returnSuccess(res.data);
+            }catch(e:unknown) {
+                //console.log(url);
+                const err = e as AxiosError
+                return returnError(err);
+            }
+        },
         searchProducts: async(data:IProductSearch)=>{
             data.brandId = data.brandId==0?null:data.brandId;
             data.categoryId = data.categoryId==0?null:data.categoryId;

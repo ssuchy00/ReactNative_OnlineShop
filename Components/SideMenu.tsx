@@ -13,6 +13,7 @@ import { UserFunction } from "../Functions/UserFunctions";
 import { IAccountSettings } from "../Views/AccountSettings";
 import { IMyOrdersProps } from "../Views/MyOrders";
 import { IContactProps } from "../Views/Contact";
+import { IUsersOrdersProps } from "../Views/UsersOrders";
 
 
 export interface IMenuProps {
@@ -27,9 +28,10 @@ const SideMenu = (props:IMenuProps) => {
 
     const [menuPos, setMenuPos]  = useState<number>(0)
     const [loggedUser, setLoggedUser] = useState<string | null>(null);
+    const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
-    type ViewType = "Cart" | "Login" | "Home" | "AccountSettings" | "MyOrders" | "Contact"
-    type ParamsType = ICartProps | ILoginProps | IAccountSettings | IMyOrdersProps | IContactProps
+    type ViewType = "Cart" | "Login" | "Home" | "AccountSettings" | "MyOrders" | "Contact" | "UsersOrders"
+    type ParamsType = ICartProps | ILoginProps | IAccountSettings | IMyOrdersProps | IContactProps | IUsersOrdersProps
 
     const Navigate = (view:ViewType, params:ParamsType | null = null) => {
         hamburgerClickHandle();
@@ -48,7 +50,14 @@ const SideMenu = (props:IMenuProps) => {
     const notloggedLinks:Array<ISideMenuElementProps> = [
         {text: "Zaloguj się", onPress: ()=>{Navigate("Login",{})}},
         {text: "Koszyk", onPress: ()=>{Navigate("Cart", {})}},
-        {text: "Skontaktuj się", onPress: ()=>{}, last: true},
+        {text: "Skontaktuj się", onPress: ()=>{Navigate("Contact", {})}, last: true},
+    ]
+    
+    const adminLinks: Array<ISideMenuElementProps> = [
+        {text: "Wyloguj się", onPress: ()=>{Navigate("Home");hamburgerClickHandle();UserFunction.logout()}},
+        {text: "Ustawienia konta", onPress: ()=>{Navigate("AccountSettings"), {}}, last:true},
+        {text: "Zamówienia użytkowników", onPress: ()=>{Navigate("UsersOrders", {})}},  
+        {text: "Skontaktuj się", onPress: ()=>{Navigate("Contact", {})}, last: true},
     ]
 
     const hamburgerClickHandle = () => {
@@ -59,8 +68,14 @@ const SideMenu = (props:IMenuProps) => {
 
     const getLoggedUser = async () =>{
         const user = await UserFunction.getUser();
-        if(user==null)setLoggedUser(null);
-        else setLoggedUser(user?.firstName)  
+        if(user==null)
+            {
+                setLoggedUser(null);
+            }
+        else {
+                setLoggedUser(user?.firstName)
+                setIsAdmin(user.role=="admin")
+            }
     }
 
     useEffect(()=>{
@@ -83,12 +98,17 @@ const SideMenu = (props:IMenuProps) => {
                 {/* Links */}
                 <View>
                     {
-                        loggedUser && loggedLinks.map((e,k)=>{
+                        loggedUser && !isAdmin && loggedLinks.map((e,k)=>{
                             return <SideMenuElement text={e.text} onPress={e.onPress} last={e.last} key={k}/>
                         })
                     }
                     {
-                        !loggedUser && notloggedLinks.map((e,k)=>{
+                        !loggedUser &&  notloggedLinks.map((e,k)=>{
+                            return <SideMenuElement text={e.text} onPress={e.onPress} last={e.last} key={k}/>
+                        })
+                    }
+                    {
+                        loggedUser && isAdmin && adminLinks.map((e,k)=>{
                             return <SideMenuElement text={e.text} onPress={e.onPress} last={e.last} key={k}/>
                         })
                     }
