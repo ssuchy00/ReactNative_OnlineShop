@@ -1,6 +1,6 @@
-import axios, { AxiosError } from "axios"
+import axios, { Axios, AxiosError } from "axios"
 import { IAddress, IApiResponse, IBrand, ICartItem, ICartRes, IProduct, IUser } from "../Interfaces/IApiResponse"
-import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IOrderFetch, IPaymentProcess, IProductPopular, IProductSearch, IUserLogin, IUserRegister } from "../Interfaces/IApiQuery";
+import { IBrandsFetch, ICartFetch, ICategoryFetch, IManufacturerFetch, IOrderDetails, IOrderFetch, IPaymentProcess, IProductPopular, IProductSearch, IUserLogin, IUserRegister } from "../Interfaces/IApiQuery";
 import { ICart } from "./CartFunctions";
 import { UserFunction } from "./UserFunctions";
 
@@ -29,7 +29,8 @@ const APIHandler = {
         },
         order: {
             fetch: "/orders/fetch",
-            send: "/orders/order/update/status"
+            send: "/orders/order/update/status",
+            add: "/orders/order/add",
         },
         payment: {
             process: "/payments/payment/process",
@@ -169,6 +170,29 @@ const APIHandler = {
                 return returnSuccess(res.data);
             }catch(e:unknown) {
                 //console.log(url);
+                const err = e as AxiosError
+                return returnError(err);
+            }
+        },
+        orderAdd: async(data: IOrderDetails) => {
+            const url = APIHandler.getUrl(APIHandler.suburls.order.add)
+            
+            try {
+
+                const formData = new FormData();
+                //console.log(Object.entries(data).map(e=>e))
+                Object.entries(data).map(e=>{
+                    formData.append(e[0], e[1])
+                })
+
+                console.log(JSON.stringify(formData))
+
+                //console.log(formData)
+                const res = await axios.post(url, data)  
+                return returnSuccess(res.data);
+            }catch(e:unknown) {
+                //console.log(url);
+                console.log((e as AxiosError).toJSON())
                 const err = e as AxiosError
                 return returnError(err);
             }

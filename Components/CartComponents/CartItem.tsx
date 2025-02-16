@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ICartItem, IProduct } from "../../Interfaces/IApiResponse";
-import { StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
 import { borderBottomStyle, borderStyle, ButtonStyles } from "../../style/style";
 import { COLORS } from "../Consts";
 import Overflow from "../SearchViewComponents/Overflow";
@@ -28,6 +28,9 @@ const CartItem = (item:ICartItemProps) =>{
     const navigation = useNavigation<CartItemScreenProp>()
 
     const [count, setCount] = useState<number>(0);
+    const [image, setImage] = useState<string>();
+
+
     const addToCart = async () => {
         
         item.getElements();
@@ -64,8 +67,15 @@ const CartItem = (item:ICartItemProps) =>{
         navigation.navigate("Item", {item:item.product}) 
     }
 
+    const getImage = async() => {
+        if(item.product.imageUrl.at(0)=='p')setImage("https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500");
+        else setImage(item.product.imageUrl)
+        //setImage(Buffer.from(response.data, 'binary').toString('base64'))
+    }
+
     useEffect(()=>{
         countElements();
+        getImage()
     })
 
     useEffect(()=>{
@@ -75,7 +85,9 @@ const CartItem = (item:ICartItemProps) =>{
         
         <TouchableOpacity onPress={onPressHandle} style={style.main}>
             {/* img */}
-            <View style={style.imgStyle}></View>
+            <View style={style.imgStyle}>
+             {image && <Image source={{uri: image}} style={style.imgStyle}/>}
+            </View>
             {/* Desc */}
             <View>
             {/* Name */}

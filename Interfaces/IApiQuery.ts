@@ -20,6 +20,13 @@ export interface IOrderFetch {
     userId:number
 }
 
+export interface IOrderDetails {
+    userId: number,
+    total: number, 
+    cartItems: Array<ICartItem>
+    deliveryAddress:string
+}
+
 export interface IPaymentProcess {
     total:number,
     currency:string,
