@@ -28,7 +28,8 @@ const APIHandler = {
             fetch: "/manufacturers/fetch"
         },
         order: {
-            fetch: "/orders/fetch"
+            fetch: "/orders/fetch",
+            send: "/orders/order/update/status"
         },
         payment: {
             process: "/payments/payment/process",
@@ -184,6 +185,18 @@ const APIHandler = {
                 return returnError(err);
             }
         },
+        sendOrder: async (data:{id:number}) => {
+            const url = APIHandler.getUrl(APIHandler.suburls.order.send) + "/"+data.id
+            try {
+                const res = await axios.post(url, {id:data.id}, {headers: { 'Content-Type': 'multipart/form-data' }});
+                console.log("Users Order",res)
+                return returnSuccess(res.data);
+            }catch(e:unknown) {
+                console.log(url)
+                const err = e as AxiosError
+                return returnError(err);
+            }
+        } ,
         searchProducts: async(data:IProductSearch)=>{
             data.brandId = data.brandId==0?null:data.brandId;
             data.categoryId = data.categoryId==0?null:data.categoryId;

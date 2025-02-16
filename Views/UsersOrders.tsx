@@ -9,6 +9,8 @@ import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
+import Button from "../Components/FormComponents/Button";
+import { ButtonStyles } from "../style/style";
 
 export interface IUsersOrdersProps {}
 
@@ -21,6 +23,7 @@ const UsersOrders = () => {
     const [orders, setOrders] = React.useState<Array<IOrder>>([])
 
     const fetchData = async() => {
+        console.log("DUPECZKA DUPECZKA");
         const user = await UserFunction.getUser();
         if(user==null)return;
         const response = await APIHandler.functions.getUsersOrder({userId: user.userId});
@@ -43,7 +46,7 @@ const UsersOrders = () => {
                     orders.map((e,k)=>{
                         return e.status=="W trakcie" && (
                         (
-                            <TouchableOpacity key={k} style={style.orderContainer} onPress={()=>{navigation.navigate("OrderDetails", {order: e})}}> 
+                            <TouchableOpacity key={k} style={style.orderContainer} onPress={()=>{navigation.navigate("OrderDetails", {order: e, updateOrders: fetchData})}}> 
                                 {/* Image */}
                                 <View style={style.orderImage}>
                                     <Image source={{uri: e.orderItems[0].product.imageUrl??"https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500"}} style={{width: 100, height: 100}}/>
@@ -66,7 +69,7 @@ const UsersOrders = () => {
                     orders.map((e,k)=>{
                         return e.status!="W trakcie" && (
                         (
-                            <TouchableOpacity key={k} style={style.orderContainer} onPress={()=>{navigation.navigate("OrderDetails", {order: e})}}> 
+                            <TouchableOpacity key={k} style={style.orderContainer} onPress={()=>{navigation.navigate("OrderDetails", {order: e, updateOrders: fetchData})}}> 
                                 {/* Image */}
                                 <View style={style.orderImage}>
                                     <Image source={{uri: e.orderItems[0].product.imageUrl??"https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500"}} style={{width: 100, height: 100}}/>
@@ -82,6 +85,13 @@ const UsersOrders = () => {
                     )}) : <Text>Brak zamówień</Text>
 
                 }
+
+                <Button 
+                    text="Odśwież"
+                    onPress={fetchData}
+                    style={{...ButtonStyles.buttonStyle, backgroundColor: COLORS.mainColor}}
+                    textStyle={{...ButtonStyles.textStyle, color: "#fff"}}
+                />
             </View>
         </Core>
     

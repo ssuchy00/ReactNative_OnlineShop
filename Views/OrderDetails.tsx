@@ -1,7 +1,7 @@
 import { StyleSheet, Touchable, TouchableOpacity, View } from "react-native"
 import Core from "../Components/Core"
 import { Text } from "react-native"
-import { ICartItem, IOrder, IUser } from "../Interfaces/IApiResponse"
+import { IApiResponse, ICartItem, IOrder, IUser } from "../Interfaces/IApiResponse"
 import { COLORS } from "../Components/Consts"
 import CartItem from "../Components/CartComponents/CartItem"
 import { useNavigation } from "@react-navigation/native"
@@ -13,9 +13,11 @@ import { ICart } from "../Functions/CartFunctions"
 import { IBuyProps } from "./Buy"
 import { useEffect, useState } from "react"
 import { UserFunction } from "../Functions/UserFunctions"
+import APIHandler from "../Functions/APIHandler"
 
 export interface IOrderDetailsProps {
-    order: IOrder
+    order: IOrder,
+    updateOrders?: ()=>void
 }
 
 type OrderDetailsScreenProp = NativeStackNavigationProp<RootStackParamList, 'OrderDetails'>;
@@ -24,12 +26,29 @@ const OrderDetails = ({route}:{route:{params:IOrderDetailsProps}}) => {
 
     const navigation = useNavigation<OrderDetailsScreenProp>()
     const [user, setUser] = useState<IUser | null>();
+    const [order, setOrder] = useState<IOrder>();
     const getUser = async() =>{
         const _user = await UserFunction.getUser();
         setUser(_user);
     }
 
-    useEffect(()=>{
+    const sendOrder = async () => {
+        if(user?.role!='admin')return;
+        const res:IApiResponse<IOrder> = await APIHandler.functions.sendOrder({id:route.params.order.orderId});
+        console.log(res);
+        if(res.data!=null)
+        {
+            setOrder(res.data)
+            console.log("CYCUNIE");
+            console.log(route.params.updateOrders)
+            if(route.params.updateOrders!=undefined)route.params.updateOrders();
+        }else{
+        }
+    }
+
+
+    useEffect(()=>{ 
+        setOrder(route.params.order)
         getUser();
     }, [])
 
@@ -39,7 +58,7 @@ const OrderDetails = ({route}:{route:{params:IOrderDetailsProps}}) => {
                 <View>
                     <Text style={style.headerStyle}>Zamówienie nr {route.params.order.orderId} z {route.params.order.createdAt}</Text>
                     {
-                        route.params.order.orderItems.map((e,k)=>{
+                        order?.orderItems.map((e,k)=>{
                             return (
                                 <TouchableOpacity key={k} style={style.cartElement} onPress={()=>{navigation.navigate("Item", {item: e.product})}}>
                                     <Text style={style.cartElementText1}>{e.product.name}</Text>
@@ -49,17 +68,19 @@ const OrderDetails = ({route}:{route:{params:IOrderDetailsProps}}) => {
                             )     
                         })      
                     } 
+                    <Text style={{fontSize: 18, color: "black"}}>Adres: </Text>
+                    <Text style={{fontSize: 16}}>{route.params.order.deliveryAddress}</Text>
                     <View style={{marginTop: 20}}/>
-                    <Text style={{fontSize: 18, color: "black"}}>Status: {route.params.order.status}</Text> 
+                    <Text style={{fontSize: 18, color: "black"}}>Status: {order?.status}</Text> 
                     {/* Sum */}
                     <View style={style.sumContainerStyle}>
                         <Text style={style.sumContainerTextStyle}>Razem: </Text>
                         <Text style={{...style.sumContainerTextStyle, ...style.sumStyle}}>{route.params.order.total.toFixed(2)} PLN</Text>
                     </View>
                 </View>
-                
+                 
                 {/* Buy now button */}
-                {user?.role=="admin" ?
+                {user?.role!="admin" && (
                 <Button 
                     text="Zamów ponownie"
                     style={{...ButtonStyles.buttonStyle ,backgroundColor: COLORS.mainColor, width: "100%", marginTop: -20, marginBottom: 20}} 
@@ -77,14 +98,15 @@ const OrderDetails = ({route}:{route:{params:IOrderDetailsProps}}) => {
                         console.log(newCart)
                         navigation.navigate("Buy", {cart: newCart.cart});
                     }}
-                    /> : 
-                    <Button 
-                        text="Wyślij zamówienie"
-                        onPress={()=>{}}
+                    /> )}
+                 
+                    {user?.role=="admin" && order?.status=="W trakcie"  ? <Button 
+                        text="Wyślij zamówienie" 
+                        onPress={()=>{sendOrder();}}
                         style={{...ButtonStyles.buttonStyle ,backgroundColor: COLORS.mainColor, width: "100%", marginTop: -20, marginBottom: 20}} 
                         textStyle={{...ButtonStyles.textStyle, color: "#fff"}}
                     
-                    />
+                    /> : <Text>Zamówienie zostało wysłane</Text>
                     }
             </View>
         </Core>

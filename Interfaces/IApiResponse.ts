@@ -49,7 +49,8 @@ export interface IOrder {
     paymentId:string,
     createdAt:string,
     status:string,
-    orderItems: Array<IOrderItem>             
+    orderItems: Array<IOrderItem>,
+    deliveryAddress: string  
 }
 
 export interface IOrderItem {
