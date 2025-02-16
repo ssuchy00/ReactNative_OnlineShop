@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native"; 
+import { Image, StyleSheet, Text, View } from "react-native"; 
 import Core from "../Components/Core";
 import { COLORS, vw } from "../Components/Consts";
 import { borderBottomStyle, ButtonStyles, margin } from "../style/style";
@@ -46,16 +46,29 @@ const Item = ({route}:{route:{params:IItemProps}}) => {
             await CartFunctions.AddToCartAPI(route.params.item);
             const count_res = await CartFunctions.GetCartAPI()
             const count = count_res?.cartItems.filter(f=>f.product.productId==route.params.item.productId)[0].quantity??0
-            //console.log(count)
             setCountInCart(count);
         }  
     } 
+
+    const [image, setImage] = useState<string | null>(null);
+
+    const getImage = async() => {
+        if(route.params.item.imageUrl.at(0)=='p')setImage("https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500");
+        else setImage(route.params.item.imageUrl)
+        //setImage(Buffer.from(response.data, 'binary').toString('base64'))
+    }
+
+    useEffect(()=>{
+        getImage();
+    }, [])
 
     return (
         <Core>
             <View style={style.mainStyle}>
                 {/* Image */}
-                <View style={style.imgViewStyle}></View>
+                <View style={style.imgViewStyle}>
+                    {image && <Image source={{uri: image}} style={style.imgViewStyle}/>}
+                </View>
                 {/* Title */}
                 <Text style={style.titleStyle}>{route.params.item.name}</Text>
                 {/* Price */}

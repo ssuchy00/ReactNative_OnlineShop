@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { IBrand, ICategory, IManufacturer, IProduct } from "../../Interfaces/IApiResponse";
 import { margin } from "../../style/style";
 import { COLORS, vw } from "../Consts";
@@ -24,7 +24,7 @@ const SearchListElement = (props:ISearchListElementProps) => {
     const [brands, setBrands] = useState<Array<IBrand>>([])
     const [manufacturer, setManufacturer] = useState<Array<IManufacturer>>([])
     const [serverError, setServerError] = useState<string | null>(null);
-
+    const [image, setImage] = useState<string>()
     const onPressHandle = () => {
         navigation.navigate("Item", {item:props.product})
     }
@@ -50,10 +50,19 @@ const SearchListElement = (props:ISearchListElementProps) => {
         setManufacturer(res.data);
     }
 
+    const getImage = async() => {
+        if(props.product.imageUrl.at(0)=='p')setImage("https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500");
+        else setImage(props.product.imageUrl)
+        //setImage(Buffer.from(response.data, 'binary').toString('base64'))
+    }
+
+
     useEffect(()=>{
+        getImage();
         GetCategories();
         GetBrands();
         GetManufacturers();
+
     }, [])
 
     return (
@@ -61,7 +70,9 @@ const SearchListElement = (props:ISearchListElementProps) => {
         <TouchableOpacity style={style.mainStyle} onPress={onPressHandle}>
             
             {/* Image view */}
-            <View style={style.imageViewStyle}></View>
+            <View style={style.imageViewStyle}>
+                {image && <Image source={{uri: image}} style={style.imageStyle}/>}
+            </View>
             {/* right view */}
             <View style={style.rightViewStyle}>
                 {/* Name */}
@@ -99,6 +110,12 @@ const style = StyleSheet.create({
         aspectRatio: 1,
         backgroundColor: "lightgray",
         ...margin(5,0,5,5)
+    },
+    imageStyle: {
+        width: '110%',
+        marginLeft: '-5%',
+        marginTop: '-5%',
+        aspectRatio: 1,
     },
     rightViewStyle: {
         padding: 10,
